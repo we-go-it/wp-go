@@ -10,7 +10,7 @@ Checked on 2026-10-17 (WPML on 2026-10-08).
 | | Version |
 |---|---|
 | WordPress | 7.1.3 |
-| WP-Go Languages | 0.1.0 |
+| WP-Go Languages | 1.0.0 |
 | WPML (sitepress-multilingual-cms) | 5.1.0 |
 | PHP | 8.5.11 (requires 8.1) |
 | MariaDB | 13.0.2 |

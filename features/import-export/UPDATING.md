@@ -11,7 +11,7 @@ Checked on 2026-10-17 (WPML on 2026-10-05).
 |---|---|
 | WordPress | 7.1.3 |
 | ACF Pro | 6.8.10 |
-| WP-Go Languages | 0.1.0 |
+| WP-Go Languages | 1.0.0 |
 | WPML | 5.1.0 |
 | PHP | 8.5.11 (requires 8.1, and the `zip` extension) |
 

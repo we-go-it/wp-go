@@ -11,7 +11,7 @@ Checked on 2026-10-05.
 | | Version |
 |---|---|
 | WordPress | 7.1.2 |
-| WP-Go Languages (`../wp-go-languages`) | 0.1.0, the repo's |
+| WP-Go Languages (`../wp-go-languages`) | 1.0.0, the repo's |
 | WPML | 5.1.0 |
 | Apache (mod_rewrite, mod_headers) | 2.4.68 |
 | PHP | 8.5.9 (requires 8.1) |

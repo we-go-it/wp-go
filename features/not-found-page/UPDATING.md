@@ -11,7 +11,7 @@ Checked on 2026-10-15.
 |---|---|
 | WordPress | 7.1.2 |
 | WPML (sitepress-multilingual-cms) | 5.1.0 |
-| WP-Go Languages | 0.1.0 |
+| WP-Go Languages | 1.0.0 |
 | Yoast SEO | 28.7 |
 | PHP | 8.5.9 (requires 8.1) |
 

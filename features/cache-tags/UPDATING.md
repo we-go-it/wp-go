@@ -13,7 +13,7 @@ Checked on 2026-10-05.
 | WordPress | 7.1.2 |
 | Timber | 2.5.1 |
 | ACF Pro | 6.8.10 |
-| WP-Go Languages (`../wp-go-languages`) | 0.1.0, the repo's |
+| WP-Go Languages (`../wp-go-languages`) | 1.0.0, the repo's |
 | WPML | 5.1.0 |
 | WPML String Translation (text tags) | 5.1.0 |
 | Contact Form 7 (forms tracked, its form screen) | 6.2.2, checked 2026-10-19 |
