@@ -1,0 +1,70 @@
+/*
+ * The editor feature's Payload mode (payload.js): JSON, not the site, in
+ * the canvas. The page's JSON (the shell) and each block's (its preview) are
+ * <pre>s; what ties them together is here: the indentation of the blocks
+ * inside them, and the commas between blocks, which are separate elements.
+ */
+
+body.editor-styles-wrapper {
+  padding: 1rem;
+  background: #fff;
+  color: #1e1e1e;
+  font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.wg-payload-page pre,
+.wg-payload-block pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* the content's blocks, at the indentation of the line they replace */
+.wg-payload-content {
+  padding-inline-start: var(--wg-indent, 0);
+}
+
+/* a container's inner blocks, inside its `"inner_blocks": [` */
+.wg-payload-inner {
+  padding-inline-start: 4ch;
+}
+
+/* No gap between blocks: the JSON runs on */
+.wg-payload-page .wp-block,
+.wg-payload-inner .wp-block {
+  margin-block: 0;
+}
+
+/*
+ * Flush left, where the indentation puts them: Gutenberg's constrained layout
+ * centres a list's children at the theme's content width, its margins
+ * !important, and pads the root list
+ */
+.wg-payload-page .block-editor-block-list__layout,
+.wg-payload-page .block-editor-block-list__layout > * {
+  max-width: none;
+  margin-inline: 0 !important;
+  padding-inline: 0;
+}
+
+/*
+ * The comma after a block: on its closing line, so set on the nearest block
+ * (each one sets it) and printed by its last <pre>. The last block of a list
+ * has none, unless the content's list is followed by drawn blocks.
+ */
+.wp-block {
+  --wg-comma: ",";
+}
+
+.wp-block:nth-last-child(1 of .wp-block) {
+  --wg-comma: "";
+}
+
+.wg-payload-content[data-comma] > .is-root-container > .wp-block:nth-last-child(1 of .wp-block) {
+  --wg-comma: ",";
+}
+
+.wg-payload-close::after {
+  content: var(--wg-comma, "");
+}

@@ -1,0 +1,1771 @@
+{
+  "mjml": {
+    "children": [
+      "mj-body",
+      "mj-head",
+      "mj-raw"
+    ],
+    "attributes": {
+      "lang": {
+        "type": "string"
+      },
+      "dir": {
+        "type": "enum(ltr,rtl,auto)"
+      },
+      "owa": {
+        "type": "enum(desktop)"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-body": {
+    "children": [
+      "mj-raw",
+      "mj-section",
+      "mj-wrapper",
+      "mj-hero"
+    ],
+    "attributes": {
+      "width": {
+        "type": "unit(px)",
+        "default": "600px"
+      },
+      "background-color": {
+        "type": "color"
+      },
+      "id": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-head": {
+    "children": [
+      "mj-attributes",
+      "mj-breakpoint",
+      "mj-html-attributes",
+      "mj-font",
+      "mj-preview",
+      "mj-style",
+      "mj-title",
+      "mj-raw"
+    ],
+    "attributes": {},
+    "endingTag": false
+  },
+  "mj-attributes": {
+    "children": [
+      "mj-all",
+      "mj-class",
+      "mj-hero",
+      "mj-button",
+      "mj-column",
+      "mj-divider",
+      "mj-group",
+      "mj-image",
+      "mj-raw",
+      "mj-section",
+      "mj-spacer",
+      "mj-text",
+      "mj-table",
+      "mj-wrapper",
+      "mj-social",
+      "mj-social-element",
+      "mj-navbar",
+      "mj-navbar-link",
+      "mj-accordion",
+      "mj-accordion-element",
+      "mj-accordion-text",
+      "mj-accordion-title",
+      "mj-carousel",
+      "mj-carousel-image"
+    ],
+    "attributes": {},
+    "endingTag": false
+  },
+  "mj-breakpoint": {
+    "children": [],
+    "attributes": {
+      "width": {
+        "type": "unit(px)"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-html-attributes": {
+    "children": [
+      "mj-selector"
+    ],
+    "attributes": {},
+    "endingTag": false
+  },
+  "mj-font": {
+    "children": [],
+    "attributes": {
+      "name": {
+        "type": "string"
+      },
+      "href": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-preview": {
+    "children": [],
+    "attributes": {},
+    "endingTag": true
+  },
+  "mj-style": {
+    "children": [],
+    "attributes": {
+      "inline": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-title": {
+    "children": [],
+    "attributes": {},
+    "endingTag": true
+  },
+  "mj-hero": {
+    "children": [
+      "mj-accordion",
+      "mj-button",
+      "mj-carousel",
+      "mj-divider",
+      "mj-image",
+      "mj-social",
+      "mj-spacer",
+      "mj-table",
+      "mj-text",
+      "mj-navbar",
+      "mj-raw"
+    ],
+    "attributes": {
+      "mode": {
+        "type": "string",
+        "default": "fixed-height"
+      },
+      "height": {
+        "type": "unit(px,%)",
+        "default": "0px"
+      },
+      "background-url": {
+        "type": "string",
+        "default": "null"
+      },
+      "background-width": {
+        "type": "unit(px,%)"
+      },
+      "background-height": {
+        "type": "unit(px,%)"
+      },
+      "background-position": {
+        "type": "string",
+        "default": "center center"
+      },
+      "border-radius": {
+        "type": "string"
+      },
+      "inner-background-color": {
+        "type": "color"
+      },
+      "inner-padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "inner-padding-top": {
+        "type": "unit(px,%)"
+      },
+      "inner-padding-left": {
+        "type": "unit(px,%)"
+      },
+      "inner-padding-right": {
+        "type": "unit(px,%)"
+      },
+      "inner-padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "0px"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)",
+        "default": "null"
+      },
+      "padding-left": {
+        "type": "unit(px,%)",
+        "default": "null"
+      },
+      "padding-right": {
+        "type": "unit(px,%)",
+        "default": "null"
+      },
+      "padding-top": {
+        "type": "unit(px,%)",
+        "default": "null"
+      },
+      "background-color": {
+        "type": "color",
+        "default": "#ffffff"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)",
+        "default": "top"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-button": {
+    "children": [],
+    "attributes": {
+      "align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "background-color": {
+        "type": "color",
+        "default": "#414141"
+      },
+      "border-bottom": {
+        "type": "string"
+      },
+      "border-left": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string",
+        "default": "3px"
+      },
+      "border-right": {
+        "type": "string"
+      },
+      "border-top": {
+        "type": "string"
+      },
+      "border": {
+        "type": "string",
+        "default": "none"
+      },
+      "color": {
+        "type": "color",
+        "default": "#ffffff"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-style": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string",
+        "default": "normal"
+      },
+      "height": {
+        "type": "unit(px,%)"
+      },
+      "href": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "inner-padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "letter-spacing": {
+        "type": "unitWithNegative(px,em)"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "120%"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "rel": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string",
+        "default": "_blank"
+      },
+      "text-decoration": {
+        "type": "string",
+        "default": "none"
+      },
+      "text-transform": {
+        "type": "string",
+        "default": "none"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)",
+        "default": "middle"
+      },
+      "text-align": {
+        "type": "enum(left,right,center)"
+      },
+      "width": {
+        "type": "unit(px,%)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-column": {
+    "children": [
+      "mj-accordion",
+      "mj-button",
+      "mj-carousel",
+      "mj-divider",
+      "mj-image",
+      "mj-raw",
+      "mj-social",
+      "mj-spacer",
+      "mj-table",
+      "mj-text",
+      "mj-navbar"
+    ],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "border": {
+        "type": "string"
+      },
+      "border-bottom": {
+        "type": "string"
+      },
+      "border-left": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string"
+      },
+      "border-right": {
+        "type": "string"
+      },
+      "border-top": {
+        "type": "string"
+      },
+      "direction": {
+        "type": "enum(ltr,rtl)",
+        "default": "ltr"
+      },
+      "inner-background-color": {
+        "type": "color"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "inner-border": {
+        "type": "string"
+      },
+      "inner-border-bottom": {
+        "type": "string"
+      },
+      "inner-border-left": {
+        "type": "string"
+      },
+      "inner-border-radius": {
+        "type": "string"
+      },
+      "inner-border-right": {
+        "type": "string"
+      },
+      "inner-border-top": {
+        "type": "string"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)",
+        "default": "top"
+      },
+      "width": {
+        "type": "unit(px,%)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-divider": {
+    "children": [],
+    "attributes": {
+      "border-color": {
+        "type": "color",
+        "default": "#000000"
+      },
+      "border-style": {
+        "type": "string",
+        "default": "solid"
+      },
+      "border-width": {
+        "type": "unit(px)",
+        "default": "4px"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "width": {
+        "type": "unit(px,%)",
+        "default": "100%"
+      },
+      "align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-group": {
+    "children": [
+      "mj-column",
+      "mj-raw"
+    ],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "direction": {
+        "type": "enum(ltr,rtl)",
+        "default": "ltr"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)"
+      },
+      "width": {
+        "type": "unit(px,%)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-image": {
+    "children": [],
+    "attributes": {
+      "alt": {
+        "type": "string",
+        "default": ""
+      },
+      "href": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "src": {
+        "type": "string"
+      },
+      "srcset": {
+        "type": "string"
+      },
+      "sizes": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "rel": {
+        "type": "string"
+      },
+      "align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "border": {
+        "type": "string",
+        "default": "0"
+      },
+      "border-bottom": {
+        "type": "string"
+      },
+      "border-left": {
+        "type": "string"
+      },
+      "border-right": {
+        "type": "string"
+      },
+      "border-top": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "fluid-on-mobile": {
+        "type": "boolean"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "target": {
+        "type": "string",
+        "default": "_blank"
+      },
+      "width": {
+        "type": "unit(px)"
+      },
+      "height": {
+        "type": "unit(px,auto)",
+        "default": "auto"
+      },
+      "max-height": {
+        "type": "unit(px,%)"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "usemap": {
+        "type": "string"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-raw": {
+    "children": [],
+    "attributes": {
+      "position": {
+        "type": "enum(file-start)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-section": {
+    "children": [
+      "mj-column",
+      "mj-group",
+      "mj-raw"
+    ],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "background-url": {
+        "type": "string"
+      },
+      "background-repeat": {
+        "type": "enum(repeat,no-repeat)",
+        "default": "repeat"
+      },
+      "background-size": {
+        "type": "string",
+        "default": "auto"
+      },
+      "background-position": {
+        "type": "string",
+        "default": "top center"
+      },
+      "background-position-x": {
+        "type": "string"
+      },
+      "background-position-y": {
+        "type": "string"
+      },
+      "border": {
+        "type": "string"
+      },
+      "border-bottom": {
+        "type": "string"
+      },
+      "border-left": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string"
+      },
+      "border-right": {
+        "type": "string"
+      },
+      "border-top": {
+        "type": "string"
+      },
+      "direction": {
+        "type": "enum(ltr,rtl)",
+        "default": "ltr"
+      },
+      "full-width": {
+        "type": "enum(full-width,false,)"
+      },
+      "gutter": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "20px 0"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "text-align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "text-padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "4px 4px 4px 0"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-spacer": {
+    "children": [],
+    "attributes": {
+      "border": {
+        "type": "string"
+      },
+      "border-bottom": {
+        "type": "string"
+      },
+      "border-left": {
+        "type": "string"
+      },
+      "border-right": {
+        "type": "string"
+      },
+      "border-top": {
+        "type": "string"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "height": {
+        "type": "unit(px,%)",
+        "default": "20px"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-text": {
+    "children": [],
+    "attributes": {
+      "align": {
+        "type": "enum(left,right,center,justify)",
+        "default": "left"
+      },
+      "background-color": {
+        "type": "color"
+      },
+      "color": {
+        "type": "color",
+        "default": "#000000"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-style": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string"
+      },
+      "height": {
+        "type": "unit(px,%)"
+      },
+      "letter-spacing": {
+        "type": "unitWithNegative(px,em)"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "1"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "text-decoration": {
+        "type": "string"
+      },
+      "text-transform": {
+        "type": "string"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-table": {
+    "children": [],
+    "attributes": {
+      "align": {
+        "type": "enum(left,right,center)",
+        "default": "left"
+      },
+      "border": {
+        "type": "string",
+        "default": "none"
+      },
+      "cellpadding": {
+        "type": "integer",
+        "default": "0"
+      },
+      "cellspacing": {
+        "type": "integer",
+        "default": "0"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "color": {
+        "type": "color",
+        "default": "#000000"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-weight": {
+        "type": "string"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "22px"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "role": {
+        "type": "enum(none,presentation)"
+      },
+      "table-layout": {
+        "type": "enum(auto,fixed,initial,inherit)",
+        "default": "auto"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)"
+      },
+      "width": {
+        "type": "unit(px,%,auto)",
+        "default": "100%"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-wrapper": {
+    "children": [
+      "mj-hero",
+      "mj-raw",
+      "mj-section"
+    ],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "background-url": {
+        "type": "string"
+      },
+      "background-repeat": {
+        "type": "enum(repeat,no-repeat)",
+        "default": "repeat"
+      },
+      "background-size": {
+        "type": "string",
+        "default": "auto"
+      },
+      "background-position": {
+        "type": "string",
+        "default": "top center"
+      },
+      "background-position-x": {
+        "type": "string"
+      },
+      "background-position-y": {
+        "type": "string"
+      },
+      "border": {
+        "type": "string"
+      },
+      "border-bottom": {
+        "type": "string"
+      },
+      "border-left": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string"
+      },
+      "border-right": {
+        "type": "string"
+      },
+      "border-top": {
+        "type": "string"
+      },
+      "direction": {
+        "type": "enum(ltr,rtl)",
+        "default": "ltr"
+      },
+      "full-width": {
+        "type": "enum(full-width,false,)"
+      },
+      "gutter": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "20px 0"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "text-align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "text-padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "4px 4px 4px 0"
+      },
+      "gap": {
+        "type": "unit(px)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-social": {
+    "children": [
+      "mj-social-element",
+      "mj-raw"
+    ],
+    "attributes": {
+      "align": {
+        "type": "enum(left,right,center)",
+        "default": "center"
+      },
+      "border": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string",
+        "default": "3px"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "color": {
+        "type": "color",
+        "default": "#333333"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-style": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string"
+      },
+      "icon-size": {
+        "type": "unit(px,%)",
+        "default": "20px"
+      },
+      "icon-height": {
+        "type": "unit(px,%)"
+      },
+      "icon-padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "inner-padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "null"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "22px"
+      },
+      "mode": {
+        "type": "enum(horizontal,vertical)",
+        "default": "horizontal"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "table-layout": {
+        "type": "enum(auto,fixed)"
+      },
+      "text-padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "text-decoration": {
+        "type": "string",
+        "default": "none"
+      },
+      "vertical-align": {
+        "type": "enum(top,bottom,middle)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-social-element": {
+    "children": [],
+    "attributes": {
+      "align": {
+        "type": "enum(left,center,right)",
+        "default": "left"
+      },
+      "icon-position": {
+        "type": "enum(left,right)",
+        "default": "left"
+      },
+      "background-color": {
+        "type": "color"
+      },
+      "color": {
+        "type": "color",
+        "default": "#000"
+      },
+      "border": {
+        "type": "string",
+        "default": "0"
+      },
+      "border-radius": {
+        "type": "string",
+        "default": "3px"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-style": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string"
+      },
+      "href": {
+        "type": "string"
+      },
+      "icon-size": {
+        "type": "unit(px,%)"
+      },
+      "icon-height": {
+        "type": "unit(px,%)"
+      },
+      "icon-padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "1"
+      },
+      "name": {
+        "type": "string"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "4px"
+      },
+      "text-padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "4px 4px 4px 0"
+      },
+      "rel": {
+        "type": "string"
+      },
+      "src": {
+        "type": "string"
+      },
+      "srcset": {
+        "type": "string"
+      },
+      "sizes": {
+        "type": "string"
+      },
+      "alt": {
+        "type": "string",
+        "default": ""
+      },
+      "title": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string",
+        "default": "_blank"
+      },
+      "text-decoration": {
+        "type": "string",
+        "default": "none"
+      },
+      "vertical-align": {
+        "type": "enum(top,middle,bottom)",
+        "default": "middle"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-navbar": {
+    "children": [
+      "mj-navbar-link",
+      "mj-raw"
+    ],
+    "attributes": {
+      "align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "base-url": {
+        "type": "string",
+        "default": "null"
+      },
+      "hamburger": {
+        "type": "string",
+        "default": "null"
+      },
+      "ico-align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "ico-open": {
+        "type": "string",
+        "default": "&#9776;"
+      },
+      "ico-close": {
+        "type": "string",
+        "default": "&#8855;"
+      },
+      "ico-color": {
+        "type": "color",
+        "default": "#000000"
+      },
+      "ico-font-size": {
+        "type": "unit(px,%)",
+        "default": "30px"
+      },
+      "ico-font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "ico-text-transform": {
+        "type": "string",
+        "default": "uppercase"
+      },
+      "ico-padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px"
+      },
+      "ico-padding-left": {
+        "type": "unit(px,%)"
+      },
+      "ico-padding-top": {
+        "type": "unit(px,%)"
+      },
+      "ico-padding-right": {
+        "type": "unit(px,%)"
+      },
+      "ico-padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "ico-text-decoration": {
+        "type": "string",
+        "default": "none"
+      },
+      "ico-line-height": {
+        "type": "unit(px,%,)",
+        "default": "30px"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-navbar-link": {
+    "children": [],
+    "attributes": {
+      "color": {
+        "type": "color",
+        "default": "#000000"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-style": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string",
+        "default": "normal"
+      },
+      "href": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string",
+        "default": "_blank"
+      },
+      "rel": {
+        "type": "string"
+      },
+      "letter-spacing": {
+        "type": "unitWithNegative(px,em)"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "22px"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "15px 10px"
+      },
+      "text-decoration": {
+        "type": "string",
+        "default": "none"
+      },
+      "text-transform": {
+        "type": "string",
+        "default": "uppercase"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-accordion": {
+    "children": [
+      "mj-accordion-element",
+      "mj-raw"
+    ],
+    "attributes": {
+      "container-background-color": {
+        "type": "color"
+      },
+      "border": {
+        "type": "string",
+        "default": "2px solid black"
+      },
+      "font-family": {
+        "type": "string",
+        "default": "Ubuntu, Helvetica, Arial, sans-serif"
+      },
+      "icon-align": {
+        "type": "enum(top,middle,bottom)",
+        "default": "middle"
+      },
+      "icon-width": {
+        "type": "unit(px,%)",
+        "default": "32px"
+      },
+      "icon-height": {
+        "type": "unit(px,%)",
+        "default": "32px"
+      },
+      "icon-wrapped-url": {
+        "type": "string",
+        "default": "https://i.imgur.com/bIXv1bk.png"
+      },
+      "icon-wrapped-alt": {
+        "type": "string",
+        "default": "+"
+      },
+      "icon-unwrapped-url": {
+        "type": "string",
+        "default": "https://i.imgur.com/w4uTygT.png"
+      },
+      "icon-unwrapped-alt": {
+        "type": "string",
+        "default": "-"
+      },
+      "icon-position": {
+        "type": "enum(left,right)",
+        "default": "right"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "10px 25px"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-accordion-element": {
+    "children": [
+      "mj-accordion-title",
+      "mj-accordion-text",
+      "mj-raw"
+    ],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "border": {
+        "type": "string"
+      },
+      "font-family": {
+        "type": "string"
+      },
+      "icon-align": {
+        "type": "enum(top,middle,bottom)"
+      },
+      "icon-width": {
+        "type": "unit(px,%)"
+      },
+      "icon-height": {
+        "type": "unit(px,%)"
+      },
+      "icon-wrapped-url": {
+        "type": "string"
+      },
+      "icon-wrapped-alt": {
+        "type": "string"
+      },
+      "icon-unwrapped-url": {
+        "type": "string"
+      },
+      "icon-unwrapped-alt": {
+        "type": "string"
+      },
+      "icon-position": {
+        "type": "enum(left,right)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-accordion-text": {
+    "children": [],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-family": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string"
+      },
+      "letter-spacing": {
+        "type": "unitWithNegative(px,em)"
+      },
+      "line-height": {
+        "type": "unit(px,%,)",
+        "default": "1"
+      },
+      "color": {
+        "type": "color"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "16px"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-accordion-title": {
+    "children": [],
+    "attributes": {
+      "background-color": {
+        "type": "color"
+      },
+      "color": {
+        "type": "color"
+      },
+      "font-size": {
+        "type": "unit(px)",
+        "default": "13px"
+      },
+      "font-family": {
+        "type": "string"
+      },
+      "font-weight": {
+        "type": "string"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}",
+        "default": "16px"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-carousel": {
+    "children": [
+      "mj-carousel-image"
+    ],
+    "attributes": {
+      "align": {
+        "type": "enum(left,center,right)",
+        "default": "center"
+      },
+      "border-radius": {
+        "type": "string",
+        "default": "6px"
+      },
+      "container-background-color": {
+        "type": "color"
+      },
+      "icon-width": {
+        "type": "unit(px,%)",
+        "default": "44px"
+      },
+      "left-icon": {
+        "type": "string",
+        "default": "https://i.imgur.com/xTh3hln.png"
+      },
+      "padding": {
+        "type": "unit(px,%){1,4}"
+      },
+      "padding-top": {
+        "type": "unit(px,%)"
+      },
+      "padding-bottom": {
+        "type": "unit(px,%)"
+      },
+      "padding-left": {
+        "type": "unit(px,%)"
+      },
+      "padding-right": {
+        "type": "unit(px,%)"
+      },
+      "right-icon": {
+        "type": "string",
+        "default": "https://i.imgur.com/os7o9kz.png"
+      },
+      "thumbnails": {
+        "type": "enum(visible,hidden,supported)",
+        "default": "visible"
+      },
+      "tb-border": {
+        "type": "string",
+        "default": "2px solid transparent"
+      },
+      "tb-border-radius": {
+        "type": "string",
+        "default": "6px"
+      },
+      "tb-hover-border-color": {
+        "type": "color",
+        "default": "#fead0d"
+      },
+      "tb-selected-border-color": {
+        "type": "color",
+        "default": "#ccc"
+      },
+      "tb-width": {
+        "type": "unit(px,%)"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  },
+  "mj-carousel-image": {
+    "children": [],
+    "attributes": {
+      "alt": {
+        "type": "string",
+        "default": ""
+      },
+      "href": {
+        "type": "string"
+      },
+      "rel": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string",
+        "default": "_blank"
+      },
+      "title": {
+        "type": "string"
+      },
+      "src": {
+        "type": "string"
+      },
+      "thumbnails-src": {
+        "type": "string"
+      },
+      "border-radius": {
+        "type": "string"
+      },
+      "tb-border": {
+        "type": "string"
+      },
+      "tb-border-radius": {
+        "type": "string"
+      },
+      "css-class": {
+        "type": "string"
+      },
+      "mj-class": {
+        "type": "string"
+      }
+    },
+    "endingTag": true
+  },
+  "mj-all": {
+    "children": [],
+    "attributes": {},
+    "endingTag": false
+  },
+  "mj-class": {
+    "children": [],
+    "attributes": {
+      "name": {
+        "type": "string"
+      }
+    },
+    "endingTag": false
+  }
+}

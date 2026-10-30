@@ -1,0 +1,87 @@
+/*
+ * The editor feature's Twig mode (twig.php): Gutenberg's and ACF's canvas
+ * patches, for any theme whose blocks are ACF previews. On the canvas and the
+ * admin document both (the sidebar's are ../../editor.css's). The theme's own (its sizes, its
+ * animations) stay in the theme.
+ */
+
+/*
+ * WordPress insets the canvas with `.editor-styles-wrapper { padding: 8px }`
+ * against a front end that has no such inset; qualifying with `body` wins on
+ * specificity rather than on load order.
+ */
+body.editor-styles-wrapper {
+  padding: 0;
+}
+
+/*
+ * Without the page shell (../../shell/, which styles the canvas while it is
+ * mounted), the block list is Gutenberg's own. The "+" between two
+ * blocks has a 24px button; give it a target worth aiming at. The inserter
+ * lives in an absolutely positioned popover, so the extra area overlays the
+ * canvas rather than taking layout space, and blocks stay put.
+ */
+:root:not(.has-editor-shell) .block-editor-block-list__insertion-point-inserter::before {
+  position: absolute;
+  inset: -1rem -2rem;
+  content: "";
+}
+
+/*
+ * A block preview is a rendering of the page, not the page. Gutenberg
+ * neutralises links in the blocks it renders itself, but an ACF preview is
+ * plain server HTML, so a linked card is a live <a href>: clicking it would
+ * load the front end into the canvas. Let the click fall through to the block
+ * wrapper instead, which is what selects the block…
+ */
+.is-root-container a {
+  pointer-events: none;
+}
+
+/* …except in text Gutenberg owns, where the caret still has to reach the link. */
+.is-root-container .block-editor-rich-text__editable a {
+  pointer-events: auto;
+}
+
+/*
+ * Gutenberg centres the children of any container it does not recognise as
+ * one of its own layouts:
+ *   .editor-styles-wrapper :where(:not(.is-layout-flex, .is-layout-grid)) > *
+ *     { margin-left: auto; margin-right: auto }
+ * An ACF <InnerBlocks /> container is not one of those, so its children get
+ * auto margins. On a grid item that beats justify-self: stretch and sizes the
+ * box to its content. Scoped off the root container so top-level alignment
+ * still behaves.
+ */
+.block-editor-block-list__layout:not(.is-root-container) > * {
+  margin-inline: 0;
+}
+
+/* Gutenberg's content width on every block: the theme's layout decides */
+html :where(.wp-block) {
+  max-width: unset !important;
+}
+
+.editor-styles-wrapper.block-editor-writing-flow {
+  height: fit-content !important;
+}
+
+.editor-visual-editor {
+  overflow: auto !important;
+}
+
+:root :where(.editor-styles-wrapper)::after {
+  height: max(20vh, 200px) !important;
+}
+
+/*
+ * A preview's Alpine components draw, but don't take clicks: a click selects
+ * the block, as on any other part of the preview.
+ */
+.acf-block-body .acf-block-preview {
+  overflow: hidden;
+}
+
+.acf-block-body .acf-block-preview [x-data] {
+  pointer-events: none;
+}

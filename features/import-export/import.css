@@ -1,0 +1,51 @@
+.wg-import-excel__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.wg-import-excel__drop {
+  flex-basis: 100%;
+  order: -1;
+  padding: 16px;
+  border: 2px dashed #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.wg-import-excel__drop.is-over {
+  border-color: #2271b1;
+  background: #f0f6fc;
+}
+
+.wg-import-excel__drop p {
+  margin: 0;
+}
+
+.wg-import-excel__drop p + p:not(:empty) {
+  margin-top: 8px;
+}
+
+.wg-import-excel__progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.wg-import-excel__progress progress {
+  inline-size: min(480px, 100%);
+  block-size: 20px;
+}
+
+.wg-import-excel__report ul {
+  margin: 0.5em 0 0.5em 1.5em;
+  list-style: disc;
+}
+
+.wg-import-excel__report .widefat {
+  margin-block: 12px;
+}

@@ -1,0 +1,1 @@
+(function(){document.getElementById(`wg-cf7-builder-slot`)?.replaceWith(document.getElementById(`wg-cf7-builder`))})();

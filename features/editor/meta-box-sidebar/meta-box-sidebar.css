@@ -1,0 +1,31 @@
+/* The Fields tab, in Settings (meta-box-sidebar.js). While it is open, core's
+   indicator goes under it: core places the tab list's ::before with
+   --selected-left/-right/-width, set inline for the tab it has selected, and
+   these win over them. */
+.wg-fields-tab-open .editor-sidebar__panel-tabs [role="tablist"] {
+  --selected-left: var(--wg-fields-tab-left) !important;
+  --selected-right: var(--wg-fields-tab-right) !important;
+  --selected-width: var(--wg-fields-tab-width) !important;
+}
+
+/* Between Page and Block: the tab list is a flex row, and the tab is
+   portalled in after core's two. Core's own tabs carry `data-tab-id`. */
+.editor-sidebar__panel-tabs [role="tablist"] > #wg-fields-tab {
+  order: 1;
+}
+
+.editor-sidebar__panel-tabs [role="tablist"] > [data-tab-id="edit-post/block"] {
+  order: 2;
+}
+
+/* Core's own panels (Page, Block), behind it. A revision being browsed shows
+   core's panel whatever the tab, with the tabs hidden. */
+.wg-fields-tab-open .interface-complementary-area:not(:has(.editor-post-revisions-timeline)) > .editor-sidebar__panel > [role="tabpanel"]:not(#wg-fields-tab-panel),
+.interface-complementary-area:has(.editor-post-revisions-timeline) #wg-fields-tab-panel {
+  display: none;
+}
+
+/* The pane under the canvas, gone once it has nothing left */
+.edit-post-meta-boxes-main:not(:has(.postbox)) {
+  display: none;
+}

@@ -1,0 +1,1 @@
+html,body:not(.editor-styles-wrapper){font-size:16px!important}.editor-visual-editor{position:relative;overflow:auto!important}.wg-editor-nuxt{z-index:1;background:#fff;border:0;width:100%;height:100%;position:absolute;inset:0}body:has(.wg-editor-nuxt) .block-editor-block-popover{display:none}body.wg-editor-nuxt-dragging .editor-visual-editor iframe{pointer-events:none}

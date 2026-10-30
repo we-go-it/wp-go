@@ -1,0 +1,142 @@
+/* Unsaved changes (changes.js): a field changed, in yellow; the Changes
+   button with its count; its dialog. */
+
+/* a field changed and not saved: its row (ACF's innermost field, a form's row) */
+.wg-changed {
+  background-color: #fcf9e8 !important;
+  box-shadow: inset 3px 0 0 #dba617;
+}
+
+.acf-field.wg-changed > .acf-label label,
+tr.wg-changed > th,
+.form-field.wg-changed > label {
+  color: #614200;
+}
+
+/* the button: its count, a yellow badge while there are changes */
+.wg-changes__button {
+  gap: 6px;
+}
+
+.wg-changes__count:empty {
+  display: none;
+}
+
+.wg-changes__count {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #dba617;
+  color: #1d2327;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+#publishing-action .wg-changes__button,
+.edit-tag-actions .wg-changes__button {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* the dialog: compact, a change a line (its label, then old → new) */
+.wg-changes__dialog {
+  width: min(600px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 25%);
+  font-size: 13px;
+}
+
+.wg-changes__dialog::backdrop {
+  background: rgb(0 0 0 / 35%);
+}
+
+.wg-changes__dialog h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.wg-changes__note,
+.wg-changes__none {
+  margin: 2px 0 6px;
+  color: #646970;
+  font-size: 12px;
+}
+
+.wg-changes__dialog h3 {
+  margin: 10px 0 2px;
+  color: #50575e;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wg-changes__dialog ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wg-changes__dialog li {
+  margin: 0;
+}
+
+.wg-changes__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  width: 100%;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: #1d2327;
+  font: inherit;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wg-changes__item:hover:not(:disabled),
+.wg-changes__item:focus-visible {
+  background: #fcf9e8;
+}
+
+.wg-changes__item:disabled {
+  cursor: default;
+}
+
+.wg-changes__item strong {
+  flex: none;
+  font-weight: 600;
+}
+
+.wg-changes__values {
+  flex: 1 1 200px;
+  min-width: 0;
+  color: #50575e;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.wg-changes__values del {
+  color: #8a2424;
+}
+
+.wg-changes__values ins {
+  color: #00450c;
+  text-decoration: none;
+}
+
+.wg-changes__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}

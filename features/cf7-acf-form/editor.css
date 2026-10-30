@@ -1,0 +1,28 @@
+/* The builder in CF7's Form tab (includes/editor.php). Its own fields sit
+   flush in the tab, as CF7's textarea did; the fields' list needs no "Campi"
+   over it, the tab says as much */
+#wg-cf7-builder > .acf-fields > .acf-field {
+  padding: 0;
+  border-top: 0;
+}
+
+#wg-cf7-builder > .acf-fields > .acf-field + .acf-field {
+  margin-top: 12px;
+}
+
+#wg-cf7-builder > .acf-fields > .acf-field-flexible-content > .acf-label {
+  display: none;
+}
+
+.wg-cf7-markup {
+  margin-top: 24px;
+}
+
+.wg-cf7-markup summary {
+  cursor: pointer;
+  color: #2271b1;
+}
+
+.wg-cf7-markup textarea {
+  background-color: #f6f7f7;
+}

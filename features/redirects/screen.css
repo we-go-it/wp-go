@@ -1,0 +1,365 @@
+/* The Redirects screen (includes/screen.php) and its dialogs. */
+
+/* The search, the table and its row icons */
+
+.wg-redirects__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.wg-redirects__filters input[type="search"] {
+  min-width: 280px;
+}
+
+.wg-redirects__table {
+  table-layout: fixed;
+}
+
+.wg-redirects__table td {
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.wg-redirects__table tbody th.check-column {
+  padding: 0 0 0 3px;
+  vertical-align: middle;
+}
+
+.wg-redirects__table tbody th.check-column input {
+  vertical-align: middle;
+}
+
+.wg-redirects__table .description {
+  display: block;
+}
+
+.wg-redirects__table * + .description {
+  margin-top: 2px;
+}
+
+.wg-redirects__table code {
+  font-size: 12px;
+}
+
+.wg-redirects__open {
+  margin-left: 2px;
+  color: #787c82;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.wg-redirects__open:hover,
+.wg-redirects__open:focus {
+  color: #2271b1;
+}
+
+.wg-redirects__open .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.wg-redirects__col-source {
+  width: 28%;
+}
+
+.wg-redirects__col-date {
+  width: 100px;
+}
+
+.wg-redirects__col-status {
+  width: 80px;
+}
+
+.wg-redirects__date {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.wg-redirects__table abbr {
+  text-decoration: none;
+  cursor: help;
+}
+
+.wg-redirects__col-actions {
+  width: 80px;
+}
+
+.wg-redirects__actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wg-redirects__table .check-column label,
+.wg-redirects__table .check-column input {
+  cursor: pointer;
+}
+
+.wg-redirects__table .check-column label:hover {
+  background: none;
+}
+
+.wg-redirects__table .check-column .label-covers-full-cell:hover + input:not(:disabled) {
+  box-shadow: none;
+}
+
+.wg-redirects__table tr.is-disabled > td:not(.wg-redirects__actions) {
+  opacity: 0.5;
+}
+
+.wg-redirects .tablenav .actions label {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.wg-redirects__actions .button-link {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 4px;
+  color: #787c82;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.wg-redirects__actions .button-link + .button-link {
+  margin-left: 6px;
+}
+
+.wg-redirects__actions .button-link:hover,
+.wg-redirects__actions .button-link:focus {
+  color: #2271b1;
+}
+
+.wg-redirects__table .wg-redirects__actions .button-link.button-link-delete {
+  color: #787c82;
+}
+
+.wg-redirects__table .wg-redirects__actions .button-link.button-link-delete:hover,
+.wg-redirects__table .wg-redirects__actions .button-link.button-link-delete:focus {
+  color: #d63638;
+}
+
+/* The dialogs, and the delete's confirmation */
+
+.wg-redirects__modal {
+  width: min(560px, calc(100vw - 32px));
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgb(0, 0, 0, 0.25);
+}
+
+.wg-redirects__confirm {
+  width: min(420px, calc(100vw - 32px));
+}
+
+.wg-redirects__confirm-sources {
+  max-height: 200px;
+  margin: 0 0 12px;
+  overflow: auto;
+}
+
+.wg-redirects__confirm-sources li {
+  margin: 0 0 4px;
+}
+
+.wg-redirects__modal::backdrop {
+  background: rgb(0, 0, 0, 0.4);
+}
+
+/* The import's report, and the export's choices (includes/import.php, includes/export.php) */
+
+.wg-redirects__import {
+  width: min(640px, calc(100vw - 32px));
+}
+
+.wg-redirects__import-report {
+  max-height: 50vh;
+  margin: 0 0 16px;
+  overflow: auto;
+}
+
+.wg-redirects__import-report .notice {
+  margin: 0 0 8px;
+}
+
+.wg-redirects__import-report ul {
+  margin: 0 0 8px 18px;
+  list-style: disc;
+}
+
+.wg-redirects__import-report li {
+  margin: 0 0 2px;
+  overflow-wrap: anywhere;
+}
+
+.wg-redirects__modal fieldset {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.wg-redirects__choice {
+  display: block;
+  margin: 0 0 6px;
+}
+
+.wg-redirects__export-tabs {
+  margin: 2px 0 0 24px;
+}
+
+.wg-redirects__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 16px;
+}
+
+.wg-redirects__choice:has(input:disabled) {
+  color: #a7aaad;
+}
+
+/* A row clicked: its details */
+
+.wg-redirects__line {
+  cursor: pointer;
+}
+
+.wg-redirects__details-body {
+  padding: 16px 20px 20px;
+}
+
+.wg-redirects__details-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 16px;
+  margin: 0 0 20px;
+}
+
+.wg-redirects__details-list dt {
+  font-weight: 600;
+}
+
+.wg-redirects__details-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.wg-redirects__details-list dd.is-empty {
+  color: #787c82;
+}
+
+/* A dialog's form; the editor's fields, the destination's search under them */
+
+.wg-redirects__modal form {
+  padding: 16px 20px 20px;
+}
+
+.wg-redirects__modal h2 {
+  margin: 0 0 16px;
+}
+
+.wg-redirects__field {
+  margin-bottom: 16px;
+}
+
+.wg-redirects__label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.wg-redirects__modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.wg-redirects__danger.button-primary {
+  background: #d63638;
+  border-color: #d63638;
+}
+
+.wg-redirects__danger.button-primary:hover,
+.wg-redirects__danger.button-primary:focus {
+  background: #b32d2e;
+  border-color: #b32d2e;
+}
+
+.wg-redirects__path {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.wg-redirects__path > span {
+  color: #787c82;
+  font-family: Consolas, Monaco, monospace;
+}
+
+.wg-redirects__row .description {
+  display: block;
+  margin-top: 4px;
+}
+
+.wg-redirects__toggle {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.wg-redirects__destination {
+  position: relative;
+}
+
+.wg-redirects__row.is-fixed .wg-redirects__post,
+.wg-redirects__row:not(.is-fixed) .wg-redirects__url {
+  display: none;
+}
+
+.wg-redirects__row.is-gone .wg-redirects__destination > :not(.wg-redirects__label) {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.wg-redirects__results {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  margin: 2px 0 0;
+  max-height: 280px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgb(0, 0, 0, 0.12);
+}
+
+.wg-redirects__results li {
+  margin: 0;
+}
+
+.wg-redirects__results button {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.wg-redirects__results button:hover,
+.wg-redirects__results button:focus {
+  background: #f0f6fc;
+}
+
+.wg-redirects__results small {
+  display: block;
+  color: #646970;
+}

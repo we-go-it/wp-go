@@ -1,0 +1,99 @@
+/* Wider than core's 280px (SIDEBAR_WIDTH, set in JS, so overridden
+   here); no room at all with no panel open */
+.interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill) {
+  min-width: 300px;
+  width: 25vw;
+  max-width: 700px;
+}
+
+.interface-interface-skeleton__sidebar:not(:has(.interface-complementary-area__fill)) {
+  width: 0 !important;
+}
+
+.interface-interface-skeleton__sidebar .interface-interface-skeleton__content {
+  overflow-x: hidden;
+}
+
+/* Core's panels are 280px wide: they fill the sidebar's width */
+.interface-interface-skeleton__sidebar :is(
+  .interface-complementary-area__fill,
+  .interface-complementary-area
+) {
+  width: 100% !important;
+}
+
+/* The handle, from 782px up */
+.wg-sidebar-resize {
+  display: none;
+}
+
+@media (min-width: 782px) {
+  .wg-sidebar-resized .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill) {
+    width: var(--wg-sidebar-width);
+    max-width: 50vw;
+  }
+
+  .interface-interface-skeleton__sidebar:has(.interface-complementary-area) > .wg-sidebar-resize {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    cursor: col-resize;
+    touch-action: none;
+  }
+
+  .wg-sidebar-resize::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: var(--wp-admin-theme-color, #3858e9);
+    opacity: 0;
+    transition: opacity .15s;
+  }
+
+  .wg-sidebar-resize:hover::after,
+  .wg-sidebar-resize:focus-visible::after,
+  .wg-sidebar-resizing .wg-sidebar-resize::after {
+    opacity: 1;
+  }
+
+  .wg-sidebar-resize:focus-visible {
+    outline: none;
+  }
+
+  .wg-sidebar-resizing,
+  .wg-sidebar-resizing * {
+    cursor: col-resize !important;
+    user-select: none;
+  }
+
+  /* The slide: the container's width, from 0 or to 0 (core's own slide can't show: the
+     panels' width is forced above). Only once the editor has loaded, never while dragging. */
+  .wg-sidebar-animated .interface-interface-skeleton__sidebar {
+    overflow-x: hidden;
+    transition: width .3s ease-out, min-width .3s ease-out;
+  }
+
+  .wg-sidebar-resizing .interface-interface-skeleton__sidebar {
+    transition: none;
+  }
+
+  .wg-sidebar-closed .interface-interface-skeleton__sidebar {
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  /* while it slides the panels keep the open width, clipped rather than re-wrapped */
+  .wg-sidebar-sliding .interface-interface-skeleton__sidebar :is(
+    .interface-complementary-area__fill,
+    .interface-complementary-area
+  ) {
+    width: var(--wg-sidebar-open-width, 100%) !important;
+  }
+}

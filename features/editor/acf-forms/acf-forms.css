@@ -1,0 +1,122 @@
+/* Collapsible fields: the chevron after the label */
+.acf-field > .acf-label:has(.wg-group-toggle) {
+  cursor: pointer;
+  user-select: none;
+}
+
+.acf-label > label:has(> .wg-group-toggle) {
+  display: flex;
+  align-items: center;
+}
+
+.acf-label > label:has(> .wg-group-toggle) > .acf-required {
+  margin-inline-start: .25em;
+}
+
+.wg-group-toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  margin-inline-start: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .15s;
+}
+
+.wg-group-toggle::before {
+  width: auto;
+  height: auto;
+  font-size: inherit;
+  line-height: 1;
+}
+
+.wg-group-toggle:focus-visible {
+  outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+}
+
+/* Collapsed */
+.acf-field.-wg-collapsed > .acf-label .wg-group-toggle {
+  transform: rotate(-90deg);
+}
+
+.acf-field.-wg-collapsed > .acf-input {
+  display: none;
+}
+
+/* A collapsed repeater row's summary field: open, no toggle */
+.acf-row.-collapsed .-collapsed-target.-wg-collapsed > .acf-input {
+  display: block;
+}
+
+.acf-row.-collapsed .-collapsed-target > .acf-label:has(.wg-group-toggle) {
+  cursor: auto;
+}
+
+.acf-row.-collapsed .-collapsed-target > .acf-label .wg-group-toggle {
+  display: none;
+}
+
+/* …and when it is a heading, its text alone */
+.acf-row.-collapsed .-collapsed-target .acf-field:is(
+  [data-key$="field_wg_heading_rich"],
+  [data-key$="field_wg_heading_tag"],
+  [data-key$="field_wg_heading_typography"]
+) {
+  display: none;
+}
+
+/* Selects as wide as the inputs: wp-admin caps them at 25rem */
+.acf-field .acf-input select {
+  max-width: none;
+}
+
+/* Image previews, smaller: the whole image, 120px tall at most */
+.acf-image-uploader .image-wrap img {
+  max-height: 120px;
+}
+
+/* The expanded editor: the whole window, square */
+.acf-block-form-modal.components-modal__frame {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* …with its fields' dividers back */
+.acf-block-form-modal.components-modal__frame .components-modal__content .acf-fields:not(.-clear) > .acf-field {
+  border: 0 !important;
+  border-top: 1px solid #eaecf0 !important;
+}
+
+.acf-block-form-modal.components-modal__frame .components-modal__content .acf-fields:not(.-clear) > .acf-field:first-child {
+  border-top: 0 !important;
+}
+
+.acf-block-form-modal.components-modal__frame .components-modal__content .acf-fields:not(.-clear) > .acf-field[data-width] + .acf-field[data-width] {
+  border-left: 1px solid #eaecf0 !important;
+}
+
+html[dir=rtl] .acf-block-form-modal.components-modal__frame .components-modal__content .acf-fields:not(.-clear) > .acf-field[data-width] + .acf-field[data-width] {
+  border-left: 0 !important;
+  border-right: 1px solid #eaecf0 !important;
+}
+
+/* The expanded editor's Cancel: kept apart from Done */
+.acf-block-form-modal .wg-acf-cancel {
+  margin-inline-end: 12px;
+}

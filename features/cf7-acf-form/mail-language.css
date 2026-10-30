@@ -1,0 +1,9 @@
+/* "Invia nella lingua predefinita", at the top of a translation's Mail (1)
+   box (includes/mail-language.php) */
+#wg-cf7-mail-language {
+  margin-bottom: 16px;
+}
+
+#wg-cf7-mail-language .acf-field {
+  padding: 0;
+}

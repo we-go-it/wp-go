@@ -1,0 +1,1 @@
+:root.has-editor-preview .is-root-container{display:none}html:where(.has-editor-shell) :where(.wp-block){margin-block:0}html:not(.has-editor-shell):not(.wg-editor-shell-settled) body.editor-styles-wrapper{opacity:0;animation:0s 5s forwards wg-editor-shell-reveal}@keyframes wg-editor-shell-reveal{to{opacity:1}}

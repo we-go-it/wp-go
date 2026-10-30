@@ -1,0 +1,20 @@
+/* The shell mounted: the page, not the framed block list */
+:root.has-editor-preview .is-root-container {
+  display: none;
+}
+
+html:where(.has-editor-shell) :where(.wp-block) {
+  margin-block: 0;
+}
+
+/* Blank until the shell has mounted or given up, 5s at most */
+html:not(.has-editor-shell):not(.wg-editor-shell-settled) body.editor-styles-wrapper {
+  opacity: 0;
+  animation: wg-editor-shell-reveal 0s 5s forwards;
+}
+
+@keyframes wg-editor-shell-reveal {
+  to {
+    opacity: 1;
+  }
+}

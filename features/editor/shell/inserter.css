@@ -1,0 +1,132 @@
+/*
+ * The editor feature's "+" between blocks (inserter.js), loaded with the page
+ * shell (shell.php). In the canvas, while the shell is mounted: a divider
+ * that takes no space before every block of a list, the top level's or a
+ * container's, and after its last (an empty list: one that does, below), and
+ * on it a strip, absolutely centred,
+ * overlapping the edges of what is on either side. The
+ * strip shows its line and its + on hover, and while its quick inserter is
+ * open. The + is drawn as Gutenberg's inner blocks' appender. With
+ * `has-line`, the divider also draws a faint dashed line of its own, always:
+ * grey at half strength, which reads on light and dark sections alike, and
+ * under the strip's line while that shows.
+ */
+
+.wg-inserter {
+  --wg-inserter-color: var(--wp-admin-theme-color, #3858e9);
+
+  position: relative;
+  z-index: 100;
+  height: 0;
+}
+
+:root:not(.has-editor-shell) .wg-inserter {
+  display: none;
+}
+
+/*
+ * Gutenberg's appender, at the end of a list: the last divider's + is it. A
+ * divider without one (the + unticked, its line alone) leaves it be.
+ */
+.wg-inserter.is-end:has(.wg-inserter__button) ~ .block-list-appender {
+  display: none;
+}
+
+/*
+ * An empty list's divider: the way in, as Gutenberg's appender was. It takes
+ * room, so an empty container still has some, and its line and + sit in the
+ * middle of it; the + shows always, the strip's line on hover.
+ */
+.wg-inserter.is-empty {
+  height: 2rem;
+}
+
+/* the line through the + (outweighing .has-line's, further down) */
+.wg-inserter.is-empty.has-line::before,
+.wg-inserter.is-empty .wg-inserter__strip {
+  top: 50%;
+}
+
+.wg-inserter.is-empty .wg-inserter__strip {
+  opacity: 1;
+}
+
+.wg-inserter.is-empty:not(.is-open) .wg-inserter__strip:not(:hover)::before {
+  opacity: 0;
+}
+
+/* where one block ends: 1px, over the edge, taking no clicks */
+.wg-inserter.has-line::before {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: repeating-linear-gradient(to right, rgb(140 143 148 / 0.5) 0 6px, transparent 6px 12px);
+  translate: 0 -50%;
+  pointer-events: none;
+  content: "";
+}
+
+.wg-inserter__strip {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  translate: 0 -50%;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.wg-inserter__strip:hover,
+.wg-inserter.is-open .wg-inserter__strip {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+/* the line, across the page */
+.wg-inserter__strip::before {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 2px;
+  translate: 0 -50%;
+  background: var(--wg-inserter-color);
+  content: "";
+}
+
+.wg-inserter__button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: #1e1e1e;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* as Gutenberg's inner blocks' appender: dark, the theme colour on hover */
+.wg-inserter__button:hover {
+  background: var(--wg-inserter-color);
+}
+
+.wg-inserter__button svg {
+  fill: currentColor;
+}
+
+/* turned to an × while its quick inserter is open */
+.wg-inserter.is-open .wg-inserter__button svg {
+  rotate: 45deg;
+}
+
+@media not (prefers-reduced-motion) {
+  .wg-inserter__button svg {
+    transition: rotate cubic-bezier(0.165, 0.84, 0.44, 1) 0.2s;
+  }
+}

@@ -1,0 +1,264 @@
+/* The WP-Go screen (screen.php). */
+
+/* each plugin a card, closed until opened: a postbox, its header the summary */
+.wp-go-card {
+  max-width: 960px;
+  margin-bottom: 12px;
+}
+
+.wp-go-card > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.wp-go-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wp-go-card > summary h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.wp-go-card__needs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  color: #646970;
+  font-size: 12px;
+}
+
+.wp-go-need {
+  padding: 1px 8px;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.wp-go-need.is-met {
+  border-color: #68de7c;
+  color: #00450c;
+}
+
+.wp-go-need.is-missing {
+  border-color: #d63638;
+  background: #fcf0f1;
+  color: #8a2424;
+}
+
+.wp-go-card__status {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f0f0f1;
+  color: #50575e;
+  font-size: 12px;
+}
+
+.wp-go-card__status.is-on {
+  background: #edfaef;
+  color: #00450c;
+}
+
+.wp-go-card > summary .dashicons {
+  color: #787c82;
+  transition: transform 0.2s;
+}
+
+.wp-go-card[open] > summary .dashicons {
+  transform: rotate(180deg);
+}
+
+.wp-go-card[open] > summary {
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.wp-go-card .inside {
+  margin: 0;
+  padding: 4px 16px 8px;
+}
+
+.wp-go-card .form-table {
+  margin-top: 0;
+}
+
+.wp-go-card__missing {
+  color: #8a2424;
+}
+
+/* a needed plugin missing: the card greyed, its checkboxes left as chosen */
+.wp-go-card.is-unavailable {
+  background: #f6f7f7;
+}
+
+.wp-go-card.is-unavailable > summary h2,
+.wp-go-card.is-unavailable .wp-go-card__about,
+.wp-go-card.is-unavailable .form-table,
+.wp-go-row.is-unavailable > * {
+  opacity: 0.5;
+}
+
+.wp-go-card:not(.is-unavailable) .wp-go-card__missing {
+  display: none;
+}
+
+/* a multiselect: a field that filters the choices, the picked ones as chips below it */
+.wp-go-combobox {
+  position: relative;
+  max-width: 520px;
+}
+
+.wp-go-combobox select[hidden] {
+  display: none;
+}
+
+.wp-go-combobox__control {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 4px;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  background: #fff;
+  cursor: text;
+}
+
+.wp-go-combobox__control::after {
+  content: '\f347';
+  font: normal 16px/1 dashicons;
+  color: #787c82;
+}
+
+.wp-go-combobox__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.wp-go-combobox__chips:empty {
+  display: none;
+}
+
+.wp-go-combobox__control:focus-within {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.wp-go-combobox__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 2px 0 8px;
+  border-radius: 2px;
+  background: #f0f0f1;
+  line-height: 24px;
+}
+
+.wp-go-combobox__chip button {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: #50575e;
+  cursor: pointer;
+}
+
+.wp-go-combobox__chip button:hover,
+.wp-go-combobox__chip button:focus {
+  background: #dcdcde;
+  color: #1d2327;
+}
+
+.wp-go-combobox__chip .dashicons {
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.wp-go-combobox input[type="text"] {
+  flex: 1;
+  min-width: 120px;
+  min-height: 24px;
+  margin: 0;
+  padding: 0 4px;
+  border: 0;
+  box-shadow: none;
+  background: none;
+}
+
+.wp-go-combobox input[type="text"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.wp-go-combobox__list {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  right: 0;
+  left: 0;
+  max-height: 220px;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  overflow: auto;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.wp-go-combobox__list[hidden] {
+  display: none;
+}
+
+.wp-go-combobox__list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.wp-go-combobox__list li::before {
+  content: '';
+  width: 16px;
+  flex: none;
+}
+
+.wp-go-combobox__list li[aria-selected="true"]::before {
+  content: '\2713';
+  color: #2271b1;
+  font-weight: 600;
+}
+
+.wp-go-combobox__list li.is-active {
+  background: #2271b1;
+  color: #fff;
+}
+
+.wp-go-combobox__list li.is-active::before {
+  color: #fff;
+}
+
+.wp-go-combobox__list .wp-go-combobox__empty {
+  color: #646970;
+  cursor: default;
+}
+
+.wp-go-row--setting th {
+  padding-left: 24px;
+  font-weight: 400;
+}

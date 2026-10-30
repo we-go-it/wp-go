@@ -1,0 +1,11 @@
+<wpml-config>
+    <custom-fields>
+        <!--
+            The MJML behind each mail body (features/cf7-mjml/cf7-mjml.php): like the mail it
+            compiles to, seeded once, then each language's own. _wg_mail_mjml is its key on a
+            form not saved since the feature left the theme.
+        -->
+        <custom-field action="copy-once">_wp_go_mail_mjml</custom-field>
+        <custom-field action="copy-once">_wg_mail_mjml</custom-field>
+    </custom-fields>
+</wpml-config>

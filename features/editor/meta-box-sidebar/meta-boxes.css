@@ -1,0 +1,11 @@
+.edit-post-meta-boxes-area #poststuff .postbox > .postbox-header h2.hndle {
+  padding-inline: 16px;
+}
+
+.edit-post-meta-boxes-area #poststuff .postbox > .inside {
+  padding: 0 16px 16px;
+}
+
+.edit-post-meta-boxes-area #poststuff .postbox > .inside select {
+  margin-inline: 0;
+}
