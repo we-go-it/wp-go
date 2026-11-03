@@ -66,10 +66,6 @@ html :where(.wp-block) {
   height: fit-content !important;
 }
 
-.editor-visual-editor {
-  overflow: auto !important;
-}
-
 :root :where(.editor-styles-wrapper)::after {
   height: max(20vh, 200px) !important;
 }
