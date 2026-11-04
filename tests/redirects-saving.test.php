@@ -101,11 +101,17 @@ wgr_row(['source' => 'wgtest-caffe', 'url' => 'x']);
 same(null, wgr_find('wgtest-caffè'), 'caffè isn\'t caffe: the source is compared byte for byte');
 check('caffè can be written beside caffe', $wpdb->insert($table, ['source' => 'wgtest-caffè', 'url' => 'y', 'status' => 301, 'created' => current_time('mysql', true)]) !== false);
 same('y', wgr_find('wgtest-caffè')->url, 'each is found as itself');
-$long = 'wgtest-' . str_repeat('b', 200);
-wgr_row(['source' => $long . '1', 'url' => 'x']);
-$wpdb->suppress_errors(true);
-same(false, $wpdb->insert($table, ['source' => $long . '2', 'url' => 'x', 'status' => 301, 'created' => current_time('mysql', true)]), 'two sources alike in their first 191 characters can\'t both be in');
-$wpdb->suppress_errors(false);
+
+// MySQL's prefix index: SQLite's keeps the whole value, and lets both in
+if (defined('DB_ENGINE') && DB_ENGINE === 'sqlite') {
+    echo 'SKIPPED: the 191 characters of the source\'s index, on SQLite' . PHP_EOL;
+} else {
+    $long = 'wgtest-' . str_repeat('b', 200);
+    wgr_row(['source' => $long . '1', 'url' => 'x']);
+    $wpdb->suppress_errors(true);
+    same(false, $wpdb->insert($table, ['source' => $long . '2', 'url' => 'x', 'status' => 301, 'created' => current_time('mysql', true)]), 'two sources alike in their first 191 characters can\'t both be in');
+    $wpdb->suppress_errors(false);
+}
 
 section('The save: written by hand');
 
@@ -158,9 +164,13 @@ $answer = $save(['new-0' => ['source' => 'wgtest-page', 'fixed' => '1', 'url' =>
 $said = $notices();
 check('an exact source where a page is published is saved, with a warning', ($args($answer)['added'] ?? '') === '1' && str_contains(implode(' ', $said['warning']), 'wgtest-page'));
 
+// the row's own insert made to fail, whatever the database's indexes
+$refuse = fn (string $query) => str_starts_with(ltrim($query), 'INSERT') && str_contains($query, $table) && str_contains($query, 'wgtest-refused') ? 'INSERT INTO wgtest_no_such_table (a) VALUES (1)' : $query;
+add_filter('query', $refuse);
 $wpdb->suppress_errors(true);
-$answer = $save(['new-0' => ['source' => $long . '3', 'fixed' => '1', 'url' => 'x']]);
+$answer = $save(['new-0' => ['source' => 'wgtest-refused', 'fixed' => '1', 'url' => 'x']]);
 $wpdb->suppress_errors(false);
+remove_filter('query', $refuse);
 $said = $notices();
 check('a row the database refuses isn\'t counted, and its message is said', ($args($answer)['added'] ?? '') === '0' && str_contains(implode(' ', $said['error']), 'the database refused it'));
 
