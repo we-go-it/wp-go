@@ -43,6 +43,10 @@ Checked on 2026-10-01, Contact Form 7 on 2026-10-19.
   `wpcf7-copy`, `wpcf7-delete`) to set the form's `action` and nonce, so the submitter has to be
   passed on. If CF7 renames its Save button's `name`, a save no longer waits: an edit saved within
   its compile stores the new MJML beside the old HTML, which the next load rewrites.
+- **mjml-browser and its dependencies bundle lodash**, which writes itself on the global `_` as it loads,
+  overwriting WordPress's underscore. `vite.config.js` has the bundle put back what it found (`banner`,
+  `footer`), which needs the bundle's code to run at once: a top-level `await`, or a chunk, would have
+  the footer run first. `tests/js/cf7-mjml-bundle.test.mjs` checks the built file.
 - **mjml-browser 5 takes `cheerio` from outside its bundle** (a UMD external, `require("cheerio")`).
   It is a dependency of its own, and Vite resolves it to cheerio's `browser` export, which keeps
   Node-only code (undici) out. If cheerio reorders its export conditions so that `require` wins,
