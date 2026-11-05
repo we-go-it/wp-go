@@ -283,6 +283,13 @@ toggle inside the heading's.
   `.acf-block-form-modal` with names starting `acf-block_`, and the `append`, `remove` and
   `sortstop` actions. A block's data by name (`title`, `_title` its key) or by key once its form
   has written it. Checked against ACF Pro 6.8.10.
+- **ACF's `hasAcfError` block attribute**, set as a block's form validates, the post dirty from it
+  (a required field empty, even on load): not compared, and the baseline is taken as the first
+  blocks come so it stays out. Renamed, such a block is listed as changed, with no field.
+- **What a block's form rewrites as it draws**: line endings, and TinyMCE's rewriting of a wysiwyg
+  (entities, a style's spaces, attributes' order, `<br />`, the `<p>` around a text). `markup()`
+  takes those out, by regex. If TinyMCE rewrites something else, such a field is listed with the
+  same text on both sides.
 - **Yoast's hidden fields** (`yoast_wpseo_title`, `_metadesc`, `_focuskw`, the social and X ones),
   kept in step with its React box for the save: what's listed under SEO. If Yoast stops writing
   them before the save, its changes aren't listed.

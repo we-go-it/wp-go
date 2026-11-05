@@ -141,6 +141,18 @@ describe('the forms\' fields', () => {
     assert.deepEqual(f.tracker.changes().map(change => [ change.group, change.label, change.after ]), [ [ 'seo', 'SEO title', 'Home page' ] ])
   })
 
+  test('Yoast\'s title losing the space after it: no change; its words, a change', () => {
+    const f = forms()
+    const title = f.document.querySelector('[name="yoast_wpseo_title"]')
+
+    title.value = 'Home '
+    f.tracker.reset()
+    title.value = 'Home'
+    assert.deepEqual(f.tracker.changes(), [])
+    title.value = 'Casa'
+    assert.deepEqual(f.tracker.changes().map(change => change.after), [ 'Casa' ])
+  })
+
   test('a label without ACF\'s required mark', () => {
     const f = forms(`<form id="post"><div class="acf-field"><div class="acf-label"><label>Eyebrow <span class="acf-required">*</span></label></div><div class="acf-input"><input name="acf[field_e]" value="a"></div></div></form>`)
 
@@ -484,6 +496,88 @@ describe('an ACF block\'s data, as ACF writes it', () => {
     const changes = trackBlocksWith(fields, saved, { ...drawn, field_form_container: { ...drawn.field_form_container, field_form_container_field_wg_padding: 'large' } })
 
     assert.deepEqual(changes.map(change => [ change.label, change.before, change.after ]), [ [ 'Hero › Padding top', 'medium', 'large' ] ], 'one changed: by its label, from the composite key')
+  })
+
+  test('a clone in several blocks, each with its own default: a field its form fills in with its block\'s isn\'t a change, another value is', () => {
+    const fields = {
+      field_hero_container_field_wg_padding: { label: 'Padding', type: 'select', default: 'none' },
+      field_gallery_container_field_wg_padding: { label: 'Padding', type: 'select', default: 'large' },
+      field_footer_container_field_wg_padding: { label: 'Padding', type: 'select', default: 'small' }
+    }
+    const drawn = (clone, padding) => ({ [clone]: { [`${clone}_field_wg_padding`]: padding } })
+
+    assert.deepEqual(trackBlocksWith(fields, {}, drawn('field_hero_container', 'none')), [], 'the hero\'s default')
+    assert.deepEqual(trackBlocksWith(fields, {}, drawn('field_gallery_container', 'large')), [], 'the gallery\'s default')
+
+    const changes = trackBlocksWith(fields, {}, drawn('field_hero_container', 'large'))
+
+    assert.deepEqual(changes.map(change => [ change.label, change.before, change.after ]), [ [ 'Hero › Padding', '(empty)', 'large' ] ], 'the gallery\'s default on the hero: a change')
+  })
+
+  test('a true/false off, however it\'s written: no change; on, a change', () => {
+    const fields = { field_target: { label: 'New tab', type: 'true_false', default: '' } }
+    const saved = { target: '', _target: 'field_target' }
+
+    assert.deepEqual(trackBlocksWith(fields, saved, { field_target: '0' }), [], 'saved empty, its form writes 0')
+    assert.deepEqual(trackBlocksWith(fields, {}, { field_target: '0' }), [], 'not saved at all, its form writes 0')
+    assert.deepEqual(trackBlocksWith(fields, saved, { field_target: '1' }).map(change => change.after), [ '1' ])
+    assert.deepEqual(trackBlocksWith(fields, { target: '1', _target: 'field_target' }, { field_target: '0' }).map(change => change.after), [ '0' ])
+  })
+
+  test('a text as a form rewrites it: its line endings, the space around it: no change; its words, a change', () => {
+    const fields = { field_wall: { label: 'Wall', type: 'textarea', default: '' } }
+    const saved = { wall: 'Uno\nDue\r\n', _wall: 'field_wall' }
+
+    assert.deepEqual(trackBlocksWith(fields, saved, { field_wall: 'Uno\r\nDue' }), [])
+    assert.equal(trackBlocksWith(fields, saved, { field_wall: 'Uno\r\nTre' }).length, 1)
+  })
+
+  test('a wysiwyg as TinyMCE rewrites it as it draws: no change; its markup or its paragraphs changed, a change', () => {
+    const fields = { field_text: { label: 'Text', type: 'wysiwyg', default: '' } }
+    const changes = (saved, drawn) => trackBlocksWith(fields, { text: saved, _text: 'field_text' }, { field_text: drawn }).length
+
+    assert.equal(changes('Toso & Massari', 'Toso &amp; Massari'), 0, 'an entity')
+    assert.equal(changes('<div style="height:50px"></div>', '<div style="height: 50px;"></div>'), 0, 'a style\'s spaces')
+    assert.equal(changes('<p><a href="/x" class="y" title="z">Uno</a></p>', '<a class="y" title="z" href="/x">Uno</a>'), 0, 'its attributes\' order, its paragraph')
+    assert.equal(changes('Uno<br />Due', 'Uno<br>Due'), 0, 'a line break')
+
+    assert.equal(changes('Uno', '<strong>Uno</strong>'), 1, 'bold')
+    assert.equal(changes('<a href="/x">Uno</a>', '<a href="/y">Uno</a>'), 1, 'a link')
+    assert.equal(changes('<p>Uno Due</p>', '<p>Uno</p><p>Due</p>'), 1, 'a paragraph split')
+    assert.equal(changes('<a class="a b">Uno</a>', '<a class="ab">Uno</a>'), 1, 'an attribute\'s own spaces, other than a style\'s')
+  })
+
+  test('saved in a field no block has any more (itself or its repeater), and gone from what its form writes: no change', () => {
+    const fields = { field_image: { label: 'Image', type: 'image', default: '' }, field_title: { label: 'Title', type: 'text', default: '' } }
+    const saved = {
+      title: 'Ciao', _title: 'field_title',
+      title_rich: 0, _title_rich: 'field_rich',
+      images: 1, _images: 'field_images',
+      images_0_image: 51, _images_0_image: 'field_image'
+    }
+
+    assert.deepEqual(trackBlocksWith(fields, saved, { field_title: 'Ciao' }), [])
+  })
+
+  test('ACF marking a block with an error as it loads, the post dirty before the first look: nothing listed', () => {
+    const e = editor()
+
+    e.state.blocks = [ hero('h', { title: 'Ciao', _title: 'field_title' }) ]
+    e.subscribed()()
+    e.state.dirty = true
+    e.state.blocks = [ { ...hero('h', { title: 'Ciao', _title: 'field_title' }), attributes: { hasAcfError: true, data: { title: 'Ciao', _title: 'field_title' } } } ]
+
+    assert.deepEqual(e.tracker.changes(), [])
+  })
+
+  test('a new post\'s first block, dirty as it comes: added', () => {
+    const e = editor()
+
+    e.state.dirty = true
+    e.state.blocks = [ paragraph('p', 'Ciao') ]
+    e.subscribed()()
+
+    assert.deepEqual(e.tracker.changes().map(change => change.before), [ 'added' ])
   })
 
   test('a flexible content\'s layouts, by name', () => {

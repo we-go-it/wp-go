@@ -190,7 +190,8 @@ export function trackForms ({
         return
       }
 
-      if (was && was.value === entry.value) {
+      // the space around a value is none of a change (Yoast's titles lose theirs)
+      if (was && was.value.trim() === entry.value.trim()) {
         return
       }
 

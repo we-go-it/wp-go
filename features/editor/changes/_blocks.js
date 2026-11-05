@@ -5,9 +5,10 @@
  * for the length of the editor's life), its type and attributes, and what it
  * shows. While the post isn't dirty (as loaded, and once saved) the baseline
  * is what there is, so what WordPress or a plugin does to the blocks as they
- * load counts for nothing. A block whose attributes differ from its
- * baseline's is changed, one the baseline hasn't is added, one gone is
- * removed.
+ * load counts for nothing, the first blocks taken as they come, as ACF's
+ * marking one with an error makes the post dirty straight after. A block whose
+ * attributes differ from its baseline's is changed, one the baseline hasn't is
+ * added, one gone is removed.
  *
  * A core block is listed with its text, before and after. An ACF block, with
  * each field of its data that changed, by its label (`fields`: every ACF
@@ -51,6 +52,36 @@ const normal = value => {
   return String(value)
 }
 
+// a text as compared: a form's own line endings, no space around it
+const plain = value => value.replace(/\r\n?/g, '\n').trim()
+
+// a tag's attributes as compared: in any order, a style without its spaces
+const attributes = text => (text.match(/[\w-]+(?:="[^"]*")?/g) || []).map(attribute => attribute.startsWith('style=') ? attribute.replace(/[\s;]/g, '') : attribute).sort().join(' ')
+
+// a wysiwyg's as compared: without what TinyMCE rewrites as it draws, meaning
+// the same (`&` and `&amp;`, a style's spaces, a tag's attributes' order, `<br />`,
+// the <p> around a text, a </p><p> and a blank line)
+const markup = value => plain(value)
+  .replace(/&amp;/g, '&')
+  .replace(/<\/p>\s*<p>/g, '\n\n')
+  .replace(/^<p>|<\/p>$/g, '')
+  .replace(/<([a-z][a-z0-9]*)((?:\s+[\w-]+(?:="[^"]*")?)*)\s*\/?>/gi, (tag, name, list) => `<${[ name, attributes(list) ].filter(Boolean).join(' ')}>`)
+  .replace(/[^\S\n]+/g, ' ')
+  .replace(/\n\s*\n\s*/g, '\n\n')
+
+// whether a field's two values, as normal() gives them, are the same
+const same = (was, is, field) => {
+  if (plain(was) === plain(is)) {
+    return true
+  }
+
+  if (field?.type === 'true_false') {
+    return (was || '0') === (is || '0')
+  }
+
+  return field?.type === 'wysiwyg' && markup(was) === markup(is)
+}
+
 /**
  * A field key as compared: a clone's fields written with the clone's key
  * before theirs (`field_container_field_padding`, as ACF's form writes them,
@@ -80,8 +111,12 @@ export function fieldOf (fields, key) {
  * an object of field keys is one, whatever the map knows), a repeater's rows
  * go by their order, a flexible content's layouts are `…/0/acf_fc_layout`,
  * a link (its url) is a value.
+ *
+ * `defaults` is filled with the defaults of the fields written by key, by
+ * path: from the key as written, as a clone's fields have one each in each
+ * block that clones it, and their paths are the same.
  */
-export function acfValues (data, fields = {}) {
+export function acfValues (data, fields = {}, defaults = {}) {
   const out = {}
   const type = key => fieldOf(fields, key)?.type || ''
 
@@ -115,7 +150,10 @@ export function acfValues (data, fields = {}) {
       }
 
       if (key === 'acf_fc_layout' || key.startsWith('field_')) {
-        out[`${path}/${canonical(key)}`.replace(/^\//, '')] = normal(value)
+        const at = `${path}/${canonical(key)}`.replace(/^\//, '')
+
+        out[at] = normal(value)
+        defaults[at] = fieldOf(fields, key)?.default
       }
     }
 
@@ -191,21 +229,23 @@ export function trackBlocks ({
     return out
   }
 
-  // each block's type and attributes (an ACF block's data and mode apart:
-  // its data compared as values, acfValues(); its mode, preview or form, no
-  // change); the block itself kept (the editor's are never changed in place,
+  // each block's type and attributes (an ACF block's data, mode and error
+  // apart: its data compared as values, acfValues(); its mode, preview or form,
+  // and its form's validation, no change); the block itself kept (the editor's are never changed in place,
   // a new one replaces it), its text made only for those listed
   const snapshot = () => new Map(flatten(store().getBlocks()).map(block => {
     const {
-      data = null, mode, ...rest
+      data = null, mode, hasAcfError, ...rest
     } = block.attributes || {}
+    const defaults = {}
 
     return [
       block.clientId,
       {
         name: block.name,
         attributes: JSON.stringify(rest),
-        data: data ? acfValues(data, fields) : null,
+        data: data ? acfValues(data, fields, defaults) : null,
+        defaults,
         block
       }
     ]
@@ -238,18 +278,24 @@ export function trackBlocks ({
     return shown(value, texts.empty)
   }
 
-  // the data's paths that changed: a path missing on one side is empty, and
-  // one not there before holding its field's default (ACF's form filling it
-  // in) isn't a change
-  const changedPaths = (before, after) => [ ...new Set([ ...Object.keys(before), ...Object.keys(after) ]) ].filter(path => {
+  // whether a path goes through a field no block has: what's saved for a field
+  // since removed, which its form doesn't write any more
+  const stale = path => path.split('/').some(part => part.startsWith('field_') && !fieldOf(fields, part))
+
+  // the data's paths that changed: a path missing on one side is empty, values
+  // the same as same() says aren't a change, nor one not there before holding
+  // its field's default for this block (ACF's form filling it in), nor a stale
+  // one gone
+  const changedPaths = (before, after, defaults = {}) => [ ...new Set([ ...Object.keys(before), ...Object.keys(after) ]) ].filter(path => {
     const was = before[path] ?? ''
     const is = after[path] ?? ''
+    const field = fieldOf(fields, path.split('/').pop())
 
-    if (was === is) {
+    if (same(was, is, field) || (is === '' && stale(path))) {
       return false
     }
 
-    return path in before || is !== normal(fieldOf(fields, path.split('/').pop())?.default)
+    return path in before || is !== normal(path in defaults ? defaults[path] : field?.default)
   })
 
   const isDirty = () => select('core/editor').isEditedPostDirty()
@@ -278,7 +324,7 @@ export function trackBlocks ({
         return
       }
 
-      const paths = block.data || was.data ? changedPaths(was.data || {}, block.data || {}) : []
+      const paths = block.data || was.data ? changedPaths(was.data || {}, block.data || {}, block.defaults) : []
 
       if (was.attributes === block.attributes && !paths.length) {
         return
@@ -347,7 +393,20 @@ export function trackBlocks ({
     return value.map(id => select('core').getEntityRecord('taxonomy', taxonomy.slug, id)?.name || `#${id}`).join(', ')
   }
 
-  subscribe(onChange)
+  // the baseline as the first blocks come, not a moment later
+  let loaded = false
+
+  subscribe(() => {
+    if (!loaded && store().getBlocks().length) {
+      loaded = true
+
+      if (!isDirty()) {
+        reset()
+      }
+    }
+
+    onChange()
+  })
 
   return { changes, reset }
 }
