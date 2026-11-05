@@ -45,8 +45,8 @@ function wp_go_cache_tags_save_purges(WP_Post $post): array
 {
     $moved = [];
     if (is_post_type_hierarchical($post->post_type)) {
-        foreach (get_pages(['child_of' => $post->ID, 'post_type' => $post->post_type]) ?: [] as $child) {
-            $moved[] = 'link-' . $child->ID;
+        foreach (wp_go_cache_tags_published_descendants($post->ID) as $child) {
+            $moved[] = 'link-' . $child;
         }
     }
 
@@ -68,6 +68,31 @@ function wp_go_cache_tags_save_purges(WP_Post $post): array
         'status'  => $status,
         'translations' => wp_go_cache_tags_translation_purges($post->ID),
     ];
+}
+
+/**
+ * The published posts under one, at any depth. A query a level, on `post_parent`'s index:
+ * not get_pages(`child_of`), which reads every page of the site to walk them, on each
+ * save and for each post a request changes.
+ *
+ * @return list<int>
+ */
+function wp_go_cache_tags_published_descendants(int $id): array
+{
+    global $wpdb;
+
+    $found = [];
+    $level = [$id];
+
+    while ($level) {
+        $level = array_diff(array_map('intval', $wpdb->get_col(
+            "SELECT ID FROM {$wpdb->posts} WHERE post_parent IN (" . implode(',', $level) . ") AND post_status = 'publish'"
+        )), $found, [$id]);
+
+        array_push($found, ...$level);
+    }
+
+    return $found;
 }
 
 /**
@@ -265,8 +290,10 @@ add_action('shutdown', function () {
     // its own. Not while a page renders: a meta written then (a view counter)
     // purges nothing.
     if ($ids || !wp_go_cache_tags_is_rendering()) {
+        $known = array_flip($ids);
+
         foreach (array_keys(wp_go_cache_tags_changes()) as $id) {
-            $post = in_array($id, $ids, true) ? null : get_post($id);
+            $post = isset($known[$id]) ? null : get_post($id);
             if ($post && $post->post_status === 'publish' && wp_go_cache_tags_is_tracked_type($post->post_type)) {
                 $ids[] = $id;
             }

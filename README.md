@@ -83,7 +83,7 @@ A Composer package, `we-go/wp-go` (`composer.json`), installed as a plugin: the 
 
 Its version is in two places, kept the same: `"version"` in `composer.json` and `Version:` in
 `wp-go.php`'s header. To release a change, bump both (semver: a feature or a setting added is a
-minor, a change a site must adapt to is a major), tag it (`v1.0.4`) and push, and run
+minor, a change a site must adapt to is a major), tag it (`v1.0.5`) and push, and run
 `composer update we-go/wp-go` so the lock records it. The root requires `^1.0.2`.
 
 ## Building
