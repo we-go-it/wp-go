@@ -285,6 +285,87 @@ const trackBlocksWith = (fields, before, after) => {
 const paragraph = (clientId, text) => ({ clientId, name: 'core/paragraph', html: `<p>${text}</p>`, attributes: { content: text }, innerBlocks: [] })
 const hero = (clientId, data, innerBlocks = []) => ({ clientId, name: 'acf/hero', attributes: { data }, innerBlocks })
 
+describe('a WYSIWYG\'s editor starting', () => {
+  const NAME = 'acf-block_1[field_text]'
+
+  // a block's form with a WYSIWYG, drawn after the page, and TinyMCE faked: an
+  // editor is added, and starts when told
+  function wysiwyg () {
+    const { window } = new JSDOM('<!doctype html><body><div id="side"></div></body>')
+    const { document } = window
+    let added = () => {}
+
+    window.tinymce = { editors: [], on: (event, callback) => { added = callback } }
+
+    const tracker = trackForms({ window, document, texts, onChange: () => {} })
+
+    tracker.reset()
+    document.getElementById('side').innerHTML = `<div class="acf-block-fields">${acfField('Text', `<textarea name="${NAME}">R</textarea>`)}</div>`
+
+    const control = document.querySelector('textarea')
+
+    // ACF's form, drawn: its baseline, as the observer would take it
+    assert.deepEqual(tracker.changes(), [])
+
+    const start = (text = '<p>R</p>') => {
+      let started = () => {}
+
+      added({
+        editor: {
+          initialized: false,
+          getElement: () => control,
+          save: () => { control.value = text },
+          on: (events, callback) => { events === 'init' && (started = callback) }
+        }
+      })
+      started()
+    }
+
+    return { document, tracker, control, start }
+  }
+
+  test('its field shown: what it makes of the text is the baseline, no change', () => {
+    const w = wysiwyg()
+
+    w.start()
+
+    assert.equal(w.control.value, '<p>R</p>')
+    assert.deepEqual(w.tracker.changes(), [])
+    assert.equal(w.document.querySelectorAll('.wg-changed').length, 0)
+  })
+
+  test('its field hidden by ACF\'s conditions, so disabled: changes can still be read', () => {
+    const w = wysiwyg()
+
+    w.control.disabled = true
+    w.start()
+
+    assert.deepEqual(w.tracker.changes(), [])
+  })
+
+  test('shown again: its text as the editor left it is its baseline, no change', () => {
+    const w = wysiwyg()
+
+    w.control.disabled = true
+    w.start()
+    w.tracker.changes()
+    w.control.disabled = false
+
+    assert.deepEqual(w.tracker.changes(), [])
+    assert.equal(w.document.querySelectorAll('.wg-changed').length, 0)
+  })
+
+  test('its block\'s form gone before it started: changes can still be read', () => {
+    const w = wysiwyg()
+    const form = w.document.querySelector('.acf-block-fields')
+
+    form.remove()
+    w.start()
+
+    assert.deepEqual(w.tracker.changes(), [])
+  })
+})
+
 describe('the block editor', () => {
   test('while the post isn\'t dirty, what there is is the baseline: nothing listed', () => {
     const e = editor()

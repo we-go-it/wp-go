@@ -265,8 +265,17 @@ export function trackForms ({
       const name = editor.getElement?.()?.name
 
       if (name && !started.has(name)) {
-        started.add(name)
-        baseline?.has(name) && baseline.set(name, read().get(name))
+        const entry = read().get(name)
+
+        if (entry) {
+          started.add(name)
+          baseline?.has(name) && baseline.set(name, entry)
+        } else if (baseline?.get(name)?.inBlock) {
+          // nothing to read: its field hidden by ACF's conditions (so
+          // disabled), or its block's form gone already. A block form's name
+          // takes its baseline again when next seen, as the editor left it
+          baseline.delete(name)
+        }
       }
 
       onChange()
