@@ -78,13 +78,13 @@ otherwise go on serving, stale.
 ## Installing and versioning
 
 A Composer package, `we-go/wp-go` (`composer.json`), installed as a plugin: the root
-`composer.json` has a path repository for `../wp-go`, and Composer links it into
+`composer.json` has its GitHub repository, and Composer puts a tagged version in
 `web/app/plugins/wp-go`. WordPress loads it from there, as `wp-go/wp-go.php`.
 
 Its version is in two places, kept the same: `"version"` in `composer.json` and `Version:` in
 `wp-go.php`'s header. To release a change, bump both (semver: a feature or a setting added is a
-minor, a change a site must adapt to is a major), and run `composer update we-go/wp-go` so the
-lock records it. The root requires `^1.0`.
+minor, a change a site must adapt to is a major), tag it (`v1.0.4`) and push, and run
+`composer update we-go/wp-go` so the lock records it. The root requires `^1.0.2`.
 
 ## Building
 
