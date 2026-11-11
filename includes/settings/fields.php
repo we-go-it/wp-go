@@ -114,7 +114,7 @@ function wp_go_settings_fields(): array
             'sidebar_patches' => [
                 'type'        => 'checkbox',
                 'label'       => _x('Sidebar patches', 'includes/settings/fields.php', 'wp-go'),
-                'description' => _x('WPML\'s Language box on one row, and the sidebar\'s form controls with borders and roomier lines.', 'includes/settings/fields.php', 'wp-go'),
+                'description' => _x('The sidebar\'s form controls with borders and roomier lines.', 'includes/settings/fields.php', 'wp-go'),
                 'default'     => true,
             ],
         ],

@@ -6,21 +6,24 @@ checked against. After upgrading any of them, go through the list: most of these
 ## Last checked against
 
 Checked on 2026-10-15 (the page shell, ACF forms, the title, the Fields tab and the
-resizable sidebar on 2026-10-01).
+resizable sidebar on 2026-10-01; WPML on 2026-11-11).
 
 | | Version |
 |---|---|
 | WordPress (and its Gutenberg) | 7.1.2 |
 | ACF Pro | 6.8.10 |
+| WPML | 5.3.0 |
 | PHP | 8.5.9 (requires 8.1) |
 
 ## What it relies on
 
-- **WPML's block editor script is `wpml-blocks-ui`, enqueued on `enqueue_block_assets` at the
-  default priority**, and the canvas is collected with `should_load_block_editor_scripts_and_styles`
-  filtered to `false`. `editor.php` dequeues the script there, at 100. If WPML renames it or
-  enqueues it later, the whole editor loads into the canvas again: nothing breaks, the canvas is
-  only heavier. To check, list the canvas's scripts from `_wp_get_iframed_editor_assets()`.
+- **WPML's block editor app stays out of the canvas by itself.** Since WPML 5.3 `wpml-blocks-ui`
+  is enqueued on `enqueue_block_editor_assets`, which `_wp_get_iframed_editor_assets()` doesn't
+  fire (before, it came on `enqueue_block_assets` and `editor.php` dequeued it). If WPML moves it
+  back, the whole editor loads into the canvas again: nothing breaks, the canvas is only heavier.
+  To check, list the canvas's scripts from `_wp_get_iframed_editor_assets()`. WPML 5.3 also drops
+  the Language box (`#icl_div`) from the block editor for a panel of its own, so `editor.css` no
+  longer patches it.
 - **ACF's `blocks/preview/render` filter**, for Twig mode: `twig.js` rewrites a preview's HTML
   there, before ACF turns it into React elements. It must run before the theme's script starts
   Alpine, which `enqueue_block_assets` at priority 5 ensures as long as WordPress injects the

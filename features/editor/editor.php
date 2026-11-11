@@ -35,8 +35,8 @@
  *   changes/           `changes`: unsaved changes in yellow, and a Changes
  *                      button listing them (also on a term's screen, an
  *                      ACF options page and a classic edit screen)
- *   editor.css         `sidebar_patches`: the sidebar's patches (WPML's
- *                      Language box, its form controls)
+ *   editor.css         `sidebar_patches`: the sidebar's patches (its form
+ *                      controls)
  *
  * The theme hears of it through wp_go_editor_mode(): a theme that loads its
  * blocks' assets into the canvas does so only in Twig mode. Turned off, the
@@ -119,7 +119,7 @@ function wp_go_editor_mode_inner_blocks(string $slug, string $path): string
 }
 
 // The editor's own admin patches, in every mode (editor.css): the sidebar's
-// and its meta boxes', on the admin document only, unless unticked.
+// form controls, on the admin document only, unless unticked.
 add_action('enqueue_block_editor_assets', function () {
     if (!wp_go_setting('editor', 'sidebar_patches', true)) {
         return;
@@ -127,19 +127,6 @@ add_action('enqueue_block_editor_assets', function () {
 
     wp_enqueue_style('wg-editor', wp_go_asset_url('editor/editor.css'), [], wp_go_asset_version('editor/editor.css'));
 });
-
-// WPML's block editor app (its sidebar, its language switcher blocks), kept
-// out of the canvas, in every mode. WPML enqueues it on enqueue_block_assets,
-// which builds the canvas too, and it depends on `wp-editor`: the whole editor
-// (React, wp.data, wp.blocks, the components, some 50 scripts) loaded and run
-// again inside the canvas, where nothing uses it. The canvas is collected with
-// the editor's scripts turned off, which is how it is told apart; the admin
-// document keeps the app.
-add_action('enqueue_block_assets', function () {
-    if (is_admin() && !wp_should_load_block_editor_scripts_and_styles()) {
-        wp_dequeue_script('wpml-blocks-ui');
-    }
-}, 100);
 
 // new-block/, with ACF, in every mode, on the block editor's admin document.
 // Always loaded with ACF: nuxt.js's toolbar opens the expanded editor through

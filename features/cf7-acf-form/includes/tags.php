@@ -162,7 +162,7 @@ add_action('wpcf7_swv_create_schema', function ($schema, $form) {
             $created = empty($rule['rule']) ? null : wpcf7_swv_create_rule($rule['rule'], array_diff_key($rule, ['rule' => true]));
 
             if ($created) {
-                $schema->add_rule($created);
+                $schema->addRule($created);
             }
         }
     }

@@ -1,29 +1,8 @@
 /*
  * The editor feature's admin patches, in every mode (editor.php): the
- * sidebar's and its meta boxes', none of the canvas's (each mode has its own).
+ * sidebar's form controls, none of the canvas's (each mode has its own).
  * On the editor's admin document only.
  */
-
-/*
- * WPML's Language box: the language and the translation priority dropdowns on
- * one row. WPML floats the first and clears the second onto a line of its own.
- * The priority's label is hidden.
- */
-#icl_div #icl_document_language_dropdown,
-#icl_div #icl_translation_priority_dropdown {
-  display: inline-block;
-  float: none;
-  clear: none;
-  vertical-align: bottom;
-}
-
-#icl_div #icl_document_language_dropdown {
-  margin-inline-end: 8px;
-}
-
-#icl_div #icl_translation_priority_dropdown > p:has(> label) {
-  display: none;
-}
 
 /* The sidebar's form controls (its width is ./sidebar-resize/'s) */
 .interface-interface-skeleton__sidebar select,

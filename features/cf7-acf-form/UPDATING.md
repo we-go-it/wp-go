@@ -5,11 +5,11 @@ checked against. After upgrading any of them, go through the list: most of these
 
 ## Last checked against
 
-Checked on 2026-10-01, Contact Form 7 on 2026-10-19.
+Checked on 2026-10-01, Contact Form 7 on 2026-11-11.
 
 | | Version |
 |---|---|
-| Contact Form 7 | 6.2.2 (the root `composer.json` now pins 6.2.4.1) |
+| Contact Form 7 | 6.2.5 |
 | CF7 Multilingual | 5.1.0 |
 | ACF Pro | 6.8.10 |
 | ACFML | 5.1.0 |
@@ -63,7 +63,7 @@ Checked on 2026-10-01, Contact Form 7 on 2026-10-19.
   The response has `status` (`mail_sent`, `validation_failed`, …), `message` and
   `invalid_fields[{ field, message }]`. The unit tag copies CF7's private `generate_unit_tag()`
   format, and only its presence is checked.
-- **The client rules copy CF7's.** `form.js` maps the SWV rules (`$form->get_schema()->to_array()`)
+- **The client rules copy CF7's.** `form.js` maps the SWV rules (`$form->get_schema()->toArray()`)
   onto zod, with CF7's tests ported: `isEmail()` and `isTel()` in `fields/text/text.js`, `isDate()`
   in `fields/date-picker/date-picker.js`, the file rules in `fields/file/file.js`. A rule it does
   not know passes on the client and is caught by the server. Since CF7 6.2 the rules are the
@@ -71,7 +71,8 @@ Checked on 2026-10-01, Contact Form 7 on 2026-10-19.
   test with their own static methods (`EmailRule::isEmail()`, WordPress's `is_email()` copied;
   `TelRule::isTel()`; `DateRule::isDate()`, a four-digit year) instead of `wpcf7_is_email()` and the
   others, so the `wpcf7_is_*` filters no longer reach them. They read the posted value unslashed
-  (`schema-holder.php`). A rule's array (`toArray()`, the schema's `to_array()` a wrapper) is its
+  (`schema-holder.php`). A rule's array (`toArray()`; since CF7 6.2.5 the snake_case
+  `to_array()` and `add_rule()` are deprecated wrappers, a notice under `WP_DEBUG`) is its
   known properties only: `rule`, `field`, `error`, and `threshold`, `accept`, `base` or `interval`
   as it takes them. Compare the ports with those methods after an upgrade.
 - **`[contact-form-7]` is answered on `pre_do_shortcode_tag`**. Its attributes go through
@@ -111,7 +112,7 @@ Checked on 2026-10-01, Contact Form 7 on 2026-10-19.
 - **A hidden field is taken out of the submission on CF7's own hooks.** `wpcf7_posted_data`
   drops its value (from the mail, and from anything storing the submission: CFDB7),
   `wpcf7_mail_tag_replaced` empties its mail-tag, and `wpcf7_swv_create_schema` (at 30) adds a
-  field type's own rules with `wpcf7_swv_create_rule()` and `$schema->add_rule()`, only for the
+  field type's own rules with `wpcf7_swv_create_rule()` and `$schema->addRule()`, only for the
   rows a submission shows. Which fields are hidden is worked out again from `$_POST`, for the form whose `_wpcf7` it is. If
   a hook is renamed, a hidden field's value reaches the mail, or its rules fail a submission they
   shouldn't.

@@ -19,7 +19,7 @@ unticked (`wp_go_setting('editor', <key>)`). The canvas mode's own patches go wi
 | Title in the sidebar | `post_title` | `post-title/`: the post title edited from the sidebar |
 | Fields tab | `meta_box_sidebar` | `meta-box-sidebar/`: the meta boxes in a tab of Settings |
 | Resizable sidebar | `sidebar_resize` | `sidebar-resize/`: the right sidebar, resized by dragging its edge |
-| Sidebar patches | `sidebar_patches` | `editor.css`: WPML's Language box on one row, the sidebar's form controls |
+| Sidebar patches | `sidebar_patches` | `editor.css`: the sidebar's form controls |
 
 | Mode | The canvas | Whose |
 |---|---|---|
@@ -93,8 +93,8 @@ PayloadRenderer on the editor's page and on ACF's fetch-block (priority 1).
   `x-on:event`, `<InnerBlocks />` kept intact) and restores the templates before Alpine looks.
   It's enqueued at priority 5, ahead of the theme's script, which starts Alpine. `twig.css`
   undoes Gutenberg's canvas padding and auto margins, makes links in previews unclickable (the
-  click selects the block). The sidebar's own patches (WPML's Language box, its form controls)
-  are `editor.css`'s, in every mode.
+  click selects the block). The sidebar's own patches (its form controls) are `editor.css`'s,
+  in every mode.
 - **Payload**: the PayloadRenderer on the editor's page, on ACF's fetch-block (priority 1) and on
   the shell's fetch; each preview printed as its JSON node on `wp_go_blocks/html` (priority 5),
   but a block drawn inside one (`block.drawn`), whose JSON is the drawing block's;
@@ -105,12 +105,6 @@ PayloadRenderer on the editor's page and on ACF's fetch-block (priority 1).
   mounts Nuxt's iframe and keeps it live over `postMessage`. Without `NUXT_URL` the canvas is
   Twig's, with a notice; without the content API (only known once the theme has booted
   wp-go-blocks, after the mode is picked), the editor shows an error notice instead of the page.
-
-In every mode, WPML's `wpml-blocks-ui` is dequeued from the canvas (`enqueue_block_assets`, 100):
-it depends on `wp-editor`, so the whole editor (about 50 scripts) would load again inside the
-canvas. It stays on the admin document, where WPML's sidebar and language switcher blocks use it.
-The canvas is told apart by `wp_should_load_block_editor_scripts_and_styles()`, `false` only while
-WordPress collects its assets.
 
 A container's preview keeps its `<InnerBlocks />` tag, read from the block's `.twig` template, so
 ACF still mounts its inner blocks (`wp_go_editor_mode_inner_blocks()`).
@@ -230,7 +224,7 @@ layout), none while dragging.
 | `modes/nuxt/` (`nuxt.php`, `.js`, `.css`) | Nuxt mode |
 | `shell/` (`shell.php`, `.js`, `shell-wait.css`; `inserter.js`, `.css`; `_canvas-body.js`) | Twig and Payload: the page around the blocks: shell mode, the marker, the enqueues (the inserter's too); the fetch, the mount, the React patch; the canvas kept blank until it mounts; the "+" between blocks; the wait for the canvas's body, shared by both scripts |
 | `_quick-inserter.js` | Gutenberg's quick inserter, opened at a point of the admin document: shared by `shell/inserter.js` and `modes/nuxt/nuxt.js` |
-| `editor.css` | every mode: the sidebar's patches (WPML's Language box, its form controls) |
+| `editor.css` | every mode: the sidebar's patches (its form controls) |
 | `new-block/new-block.js` | every mode, with ACF: `window.wgEditorExpand()`, which opens ACF's expanded editor on a block (Nuxt's toolbar too); and, while `new_block` is ticked, a new ACF block opened in it |
 | `acf-forms/` (`acf-forms.php`, `.js`, `.css`) | ACF's forms: the styles; the toggles, the instructions moved, validation opening groups, the expanded editor's Cancel. Enqueued after `acf-input` |
 | `post-title/` (`post-title.php`, `.js`, `post-title.css`, `post-title-canvas.css`) | the title: the canvas CSS that hides Gutenberg's, the fallback row's CSS; the field, and where it is drawn |

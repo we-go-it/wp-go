@@ -227,7 +227,7 @@ function wp_go_form_context(WPCF7_ContactForm $form, array $rows, array $overrid
             : null,
         'submit'   => trim((string) get_field('cf7_submit_label', $form->id())) ?: __('Submit', 'contact-form-7'),
         'config'   => [
-            'schema'   => $form->get_schema()->to_array(),
+            'schema'   => $form->get_schema()->toArray(),
             // the two messages form.js shows without asking CF7: the form it
             // refused to send, and the request that never got an answer
             'messages' => [
