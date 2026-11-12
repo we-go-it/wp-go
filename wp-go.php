@@ -3,9 +3,10 @@
 /**
  * Plugin Name:      WP-Go
  * Description:      Our WordPress features in one plugin, each turned on and off on the WP-Go screen: the block editor reworked, WordPress's CSS in the lowest cascade layer, Contact Form 7 forms built with ACF and mails in MJML, cache tags and a static cache, site texts for editors, redirects, container pages, an editors' 404 page, Excel import and export, the dev tools' switch.
- * Version:          1.0.6
+ * Version:          1.0.7
  * Requires at least: 7.1
  * Requires PHP:     8.1
+ * License:          MIT
  * Text Domain:      wp-go
  *
  * Each feature is a folder in features/, with its PHP (features/<name>/<name>.php),

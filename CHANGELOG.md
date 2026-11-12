@@ -2,6 +2,10 @@
 
 What changed in each version of we-go/wp-go, newest first. Versions follow semver and match the git tags (`vX.Y.Z`).
 
+## 1.0.7 — 2026-11-12
+
+- Licensed under MIT (`LICENSE`); it was proprietary.
+
 ## 1.0.6 — 2026-11-11
 
 - CF7 ACF Form: `addRule()` and `toArray()` on CF7's schema, in place of the snake_case wrappers Contact Form 7 6.2.5 deprecated (a notice under `WP_DEBUG` on every form).
