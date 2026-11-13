@@ -27,11 +27,23 @@
 //
 // The admin window can steer the fetch: `wgEditorShellParams` there is added to
 // its query string, and a `wg-editor-shell-reload` event there fetches again.
+//
+// The page shows what the editor holds, not only what is saved: once a meta
+// box field or the title changes, the page is fetched again half a second
+// after the last change, POSTing the meta boxes' ACF fields (`acf[…]`, as a
+// save would) and the title, which shell.php puts in place of the saved ones
+// for that request alone. Until then, and again after each successful save,
+// the fetch is a plain GET of what is saved.
 
 import { onCanvasBody } from './_canvas-body.js'
 
 const MARKER = 'wg-editor-content'
 const PREVIEW_MARKER = 'wg-editor-preview'
+
+// the meta boxes' forms, wherever edit-post or the Fields tab holds them
+const META_BOX_FORMS = 'form[class*="metabox-location-"]'
+// a change in them redraws the page this long after the last one
+const UNSAVED_DELAY = 500
 
 // shell-wait.css keeps the canvas blank until this class or has-editor-shell
 // is on <html>, so the framed block list never flashes before the shell. Added
@@ -53,6 +65,10 @@ function editorShell () {
   let preview = false // the fetched page had the preview marker, not the content's
   let tried = false // one attempt before the first save, so a page without a shell isn't refetched on every keystroke
   let loads = 0 // the latest fetch: an older one answering late (the fixed-layout toggle flipped twice) is dropped
+  let unsaved = false // a field or the title changed since the page loaded or last saved: the fetch POSTs them
+  let timer = 0
+
+  const admin = window.parent
 
   // the theme measures the page again: it may have measured before there was a
   // header or footer to find
@@ -138,7 +154,31 @@ function editorShell () {
     return removeChild.call(this, child)
   }
 
+  // What the editor holds and hasn't saved, for the fetch's body: every
+  // meta box's ACF fields, as edit-post serializes them on a save (TinyMCE
+  // written back to its textarea first), and the title. Null while nothing
+  // has changed, or without the nonce.
+  function unsavedBody () {
+    const nonce = window.wgEditorShell?.nonce
+    if (!unsaved || !nonce) return null
+
+    admin.tinymce?.triggerSave?.()
+
+    const body = new FormData()
+    for (const form of admin.document.querySelectorAll(META_BOX_FORMS)) {
+      for (const [ key, value ] of new admin.FormData(form)) {
+        if (key.startsWith('acf[')) body.append(key, value)
+      }
+    }
+    body.append('wp_go_shell_title', editor.getEditedPostAttribute('title') ?? '')
+    body.append('_wg_shell_nonce', nonce)
+
+    return body
+  }
+
   async function load () {
+    clearTimeout(timer)
+
     const post = editor.getCurrentPost()
     // no link yet: the post isn't in the store, and the subscription below
     // calls again once it is
@@ -160,7 +200,8 @@ function editorShell () {
         url.searchParams.set(key, value)
       }
 
-      const res = await fetch(url, { credentials: 'same-origin' })
+      const body = unsavedBody()
+      const res = await fetch(url, body ? { method: 'POST', body, credentials: 'same-origin' } : { credentials: 'same-origin' })
       if (!res.ok) {
         settle()
         return
@@ -180,11 +221,18 @@ function editorShell () {
       site.querySelectorAll('script, noscript, link, style').forEach(n => n.remove())
       site.classList.add('wg-editor-shell')
 
+      // Swapped in one go, the canvas scrolled where it was: redrawn as a
+      // field is typed in, the page mustn't jump back to the top.
+      const scroller = document.scrollingElement
+      const top = scroller?.scrollTop ?? 0
+
       unmount()
       template = site
       preview = isPreview
       bodyClasses = [ ...doc.body.classList ]
       mount()
+
+      if (scroller) scroller.scrollTop = top
     } catch {
       // No shell: the editor stays as it was.
       settle()
@@ -203,9 +251,44 @@ function editorShell () {
   })
   observer.observe(document.documentElement, { childList: true, subtree: true })
 
+  // A field or the title changed: fetch again once the typing pauses.
+  function changed () {
+    unsaved = true
+    clearTimeout(timer)
+    timer = setTimeout(load, UNSAVED_DELAY)
+  }
+
+  // A change in a meta box: through jQuery when it's there, which also hears
+  // the changes ACF triggers itself (an image picked, a date chosen), which
+  // native listeners don't; repeater rows added, removed or moved; and
+  // TinyMCE, whose typing happens in an iframe of its own.
+  const inMetaBox = el => !!el?.closest?.(META_BOX_FORMS)
+  const onField = event => inMetaBox(event.target) && changed()
+  const onRow = $el => inMetaBox($el?.[0] ?? $el) && changed()
+  const followed = new Set()
+  const follow = ed => {
+    if (followed.has(ed)) return
+    followed.add(ed)
+    ed.on('input change undo redo', changed)
+  }
+  const onEditor = event => inMetaBox(event.editor?.getElement?.()) && follow(event.editor)
+
+  const $ = admin.jQuery
+  if ($) {
+    $(admin.document).on('input change', META_BOX_FORMS, changed)
+  } else {
+    admin.document.addEventListener('input', onField, true)
+    admin.document.addEventListener('change', onField, true)
+  }
+  const rowActions = [ 'append', 'remove', 'sortstop' ]
+  rowActions.forEach(action => admin.acf?.addAction?.(action, onRow))
+  admin.tinymce?.editors?.forEach?.(ed => onEditor({ editor: ed }))
+  admin.tinymce?.on?.('AddEditor', onEditor)
+
   // The shell shows what is saved, so draw it again after each save. The first
   // load waits here too if the post was not in the store yet.
   let saving = false
+  let title = editor.getEditedPostAttribute('title')
   const unsubscribe = data.subscribe(() => {
     if (!document.defaultView) {
       unsubscribe()
@@ -213,8 +296,18 @@ function editorShell () {
     }
 
     const now = editor.isSavingPost() && !editor.isAutosavingPost()
+    // saved (the meta boxes with it, inside isSavingPost): what is saved is
+    // what the editor holds again. A failed save keeps the unsaved values.
+    if (saving && !now && editor.didPostSaveRequestSucceed()) unsaved = false
     if ((saving && !now) || (!tried && editor.getCurrentPost()?.link)) load()
     saving = now
+
+    // the title, edited (not the post arriving in the store)
+    const edited = editor.getEditedPostAttribute('title')
+    if (edited !== title) {
+      if (title !== undefined) changed()
+      title = edited
+    }
   })
 
   // The admin window asks for a fetch when something the page depends on
@@ -225,7 +318,17 @@ function editorShell () {
   window.addEventListener('pagehide', () => {
     unsubscribe()
     observer.disconnect()
+    clearTimeout(timer)
     window.parent.removeEventListener('wg-editor-shell-reload', reload)
+    if ($) {
+      $(admin.document).off('input change', META_BOX_FORMS, changed)
+    } else {
+      admin.document.removeEventListener('input', onField, true)
+      admin.document.removeEventListener('change', onField, true)
+    }
+    rowActions.forEach(action => admin.acf?.removeAction?.(action, onRow))
+    admin.tinymce?.off?.('AddEditor', onEditor)
+    followed.forEach(ed => ed.off('input change undo redo', changed))
   })
 
   load()

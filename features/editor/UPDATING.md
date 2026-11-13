@@ -129,7 +129,19 @@ resizable sidebar on 2026-10-01; WPML on 2026-11-11).
   `getCurrentPost()` (`link`, `status`, `type`), `getRenderingMode()` (the shell mounts only on
   `'post-only'`), `isSavingPost()` / `isAutosavingPost()` for the redraw, and `core`'s
   `getPostType().viewable`. If any of them is renamed, the shell settles without mounting, and
-  the canvas is Gutenberg's own.
+  the canvas is Gutenberg's own. For the unsaved values also `getEditedPostAttribute('title')`
+  and `didPostSaveRequestSucceed()`; and that `isSavingPost()` stays true until edit-post has
+  saved the meta boxes (its `editor.savePost` action, awaited before `REQUEST_POST_UPDATE_FINISH`):
+  if they were saved after it, the GET after a save would show the fields as they were.
+- **The unsaved fields** (`shell.js`, `wp_go_editor_shell_unsaved()`): the meta boxes are read
+  from `form[class*="metabox-location-"]` on the admin document, as edit-post serializes them,
+  and heard through jQuery's `input`/`change` (ACF triggers its own changes through jQuery only),
+  ACF's `append`, `remove` and `sortstop` actions, and TinyMCE's editors. On the server, ACF's
+  `acf_setup_meta()` captures the simulated save under a `block_` id, read back through
+  `acf/pre_load_metadata` and `acf/pre_load_meta` at priority 2, after ACF's local meta (1);
+  its `'__return_null'` is how a missing name reads as empty. If ACF renames any of them, the
+  fields show as saved. While the save is simulated, the `query` filter refuses anything but a
+  read: a field type writing through something other than `$wpdb` would get past it.
 
 ### ACF forms (`acf-forms/`)
 

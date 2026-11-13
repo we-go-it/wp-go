@@ -2,6 +2,11 @@
 
 What changed in each version of we-go/wp-go, newest first. Versions follow semver and match the git tags (`vX.Y.Z`).
 
+## 1.1.0 — 2026-11-13
+
+- Editor: the page shell shows the meta boxes' unsaved ACF fields and the unsaved title as they're typed, half a second after the last change, not only after a save. Nothing is written: the values stand in for the saved ones for the shell's request alone, which carries a nonce.
+- Editor: the canvas keeps its scroll position when the page shell is redrawn.
+
 ## 1.0.7 — 2026-11-12
 
 - Licensed under MIT (`LICENSE`); it was proprietary.

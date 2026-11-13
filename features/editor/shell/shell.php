@@ -24,6 +24,11 @@
  *
  * The theme hears of it through wp_go_editor_shell() (shell mode, in PHP) and the
  * `wg-editor-shell-mounted` event (on the canvas window, after each mount).
+ *
+ * The page shows what the editor holds, saved or not: once a meta box field
+ * or the title has changed, shell.js POSTs them with the fetch, and here
+ * they stand in for the saved ones for that request alone
+ * (wp_go_editor_shell_unsaved()). Nothing is written.
  */
 
 if (!defined('ABSPATH')) {
@@ -61,6 +66,109 @@ add_action('template_redirect', function () {
     }, PHP_INT_MAX);
 });
 
+/** The nonce's action: the unsaved fields are taken only from the editor's own canvas. */
+const WP_GO_EDITOR_SHELL_NONCE = 'wp_go_editor_shell_unsaved';
+
+/**
+ * The editor's unsaved values in place of the saved ones, for this request
+ * alone: the title (`wp_go_shell_title`) and ACF's fields (`acf[…]`, as the
+ * meta boxes post them). Takes the request unslashed. False, and nothing
+ * changed, without the canvas's nonce: a form on another site could
+ * otherwise have the editor's browser render a page with its values in it.
+ *
+ * The title goes through what a save would apply to it (kses, for a user
+ * without unfiltered_html), then the_title's own filters.
+ *
+ * The fields are ACF's own preview mechanism, as for a block's preview: the
+ * values saved for show, captured instead of written
+ * (wp_go_editor_shell_capture()), and read back for the post, or its
+ * autosave, which ACF reads instead in a draft's preview. Every one of its
+ * fields reads from them, so a field the form didn't post (hidden by its
+ * conditions) reads as empty. Only reads through ACF see them: get_field(),
+ * Timber's meta(); get_post_meta() still reads what is saved.
+ *
+ * @param array<string,mixed> $request
+ */
+function wp_go_editor_shell_unsaved(int $post_id, array $request): bool
+{
+    if (!wp_verify_nonce((string) ($request['_wg_shell_nonce'] ?? ''), WP_GO_EDITOR_SHELL_NONCE)) {
+        return false;
+    }
+
+    if (isset($request['wp_go_shell_title']) && is_string($request['wp_go_shell_title'])) {
+        // sanitize_post_field()'s `db` filters take slashed data, as wp_insert_post() hands it
+        $title = wp_unslash(sanitize_post_field('post_title', wp_slash($request['wp_go_shell_title']), $post_id, 'db'));
+
+        add_filter('the_title', fn ($saved, $id = 0) => (int) $id === $post_id ? $title : $saved, 1, 2);
+    }
+
+    if (!empty($request['acf']) && is_array($request['acf']) && function_exists('acf_setup_meta')) {
+        $meta = wp_go_editor_shell_capture($request['acf']);
+        $ours = fn ($id) => is_numeric($id) && ((int) $id === $post_id || wp_is_post_revision((int) $id) === $post_id);
+
+        // After ACF's own local meta (1), which has nothing for a post
+        add_filter('acf/pre_load_metadata', function ($pre, $id, $name, $hidden) use ($meta, $ours) {
+            return $ours($id) ? ($meta[ ($hidden ? '_' : '') . $name ] ?? '__return_null') : $pre;
+        }, 2, 4);
+        add_filter('acf/pre_load_meta', fn ($pre, $id) => $ours($id) ? $meta : $pre, 2, 2);
+
+        // and nothing read before this from ACF's cache of loaded values
+        acf_get_store('values')->reset();
+    }
+
+    return true;
+}
+
+/**
+ * The meta a save of these fields would write, written nowhere: ACF's
+ * acf_setup_meta() simulates the save and captures each value, under a
+ * block's id, as a block's preview does.
+ *
+ * The simulated save is not free of side effects on its own: a repeater
+ * deletes the rows past its new count, a taxonomy field can set terms, a
+ * gallery update attachments, a radio save a new choice into the field, a
+ * bidirectional relationship update the posts on the other side, and other
+ * plugins' acf/update_value hooks do what they do. So, for its duration, ACF's
+ * writes for any other id are short-circuited, every delete too, and the
+ * database refuses anything but a read.
+ *
+ * @param array<string,mixed> $values `acf[…]` as posted, unslashed
+ * @return array<string,mixed> the meta, by name, the references (`_name`) included
+ */
+function wp_go_editor_shell_capture(array $values): array
+{
+    $scratch = 'block_wg_editor_shell';
+
+    $read_only = fn ($query) => preg_match('/^\s*(?:SELECT|SHOW|DESCRIBE|DESC|EXPLAIN)\b/i', (string) $query) ? $query : '';
+    $scratch_only = fn ($pre, $id) => $id === $scratch ? $pre : true;
+    $no_delete = fn () => true;
+
+    add_filter('query', $read_only, PHP_INT_MAX);
+    add_filter('acf/pre_update_metadata', $scratch_only, 0, 2);
+    add_filter('acf/pre_delete_metadata', $no_delete, 0);
+
+    try {
+        $meta = acf_setup_meta($values, $scratch);
+    } finally {
+        acf_reset_meta($scratch);
+        remove_filter('query', $read_only, PHP_INT_MAX);
+        remove_filter('acf/pre_update_metadata', $scratch_only, 0);
+        remove_filter('acf/pre_delete_metadata', $no_delete, 0);
+    }
+
+    return is_array($meta) ? $meta : [];
+}
+
+// The unsaved values, POSTed by shell.js. On `wp`, as soon as the queried
+// post is known, before anything reads its fields.
+add_action('wp', function () {
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST' || !wp_go_editor_shell()) {
+        return;
+    }
+
+    wp_go_editor_shell_unsaved(get_queried_object_id(), wp_unslash($_POST));
+}, 0);
+
 // The canvas: shell.js, always. With it the dividers between blocks
 // (inserter.js, inserter.css), only while either of what they draw is ticked:
 // the "+" between blocks, since the page has no gap for Gutenberg's own
@@ -79,6 +187,10 @@ add_action('enqueue_block_assets', function () {
         wp_go_asset_version('editor/shell/shell.js'),
         true
     );
+    // the nonce the unsaved fields go with (wp_go_editor_shell_unsaved())
+    wp_add_inline_script('wg-editor-shell', 'window.wgEditorShell = ' . wp_json_encode([
+        'nonce' => wp_create_nonce(WP_GO_EDITOR_SHELL_NONCE),
+    ]) . ';', 'before');
 
     $plus = (bool) wp_go_setting('editor', 'inserter', true);
     $line = (bool) wp_go_setting('editor', 'separators', true);

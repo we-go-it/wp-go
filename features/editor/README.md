@@ -121,6 +121,17 @@ ACF still mounts its inner blocks (`wp_go_editor_mode_inner_blocks()`).
    cloned in front of `.is-root-container`, and the marker swapped for the block list. Everything
    off the way down to the list is `inert`. The page's body classes go on the canvas body.
 3. **Redrawn** after every save but autosaves, and on `wg-editor-shell-reload`.
+4. **Unsaved fields, shown as typed.** Once a meta box field or the title changes, the page is
+   fetched again half a second after the last change, as a POST carrying the meta boxes' ACF
+   fields (`acf[…]`, as a save serializes them) and the title, with the canvas's nonce. For that
+   request alone they stand in for the saved ones (`wp_go_editor_shell_unsaved()`): the title
+   through `the_title`, the fields through ACF's own preview mechanism, as a block's preview,
+   with the database refusing any write while ACF simulates the save. After a successful save
+   the fetch is a plain GET again.
+
+   Only what reads through ACF sees them: `get_field()`, `get_fields()`, Timber's `meta()`.
+   `get_post_meta()` reads what is saved, as do other plugins' boxes (Yoast). A field the form
+   doesn't post (hidden by its conditions) reads as empty until saved.
 
 Until it has mounted or given up, the canvas is blank (5s at most), so the framed block list never
 flashes first.
